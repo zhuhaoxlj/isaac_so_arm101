@@ -1,0 +1,96 @@
+--- git status ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs/rsl_rl/reach/2026-02-22_04-02-57/
+	logs/rsl_rl/reach/2026-02-22_04-23-11/
+	logs/rsl_rl/reach/2026-02-22_04-38-02/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 8481a5c..ce361c8 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -26,10 +26,12 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=1.0,             # 0.2 → 1.0（恢复原始值）：
+-                                        # 0.2 导致 entropy collapse（iter100 noise=0.144→iter1474 noise=0.065）
+-                                        # noise 的自然衰减（1.0→0.1 over 700 iters）本身是探索→开发课程
+-                                        # 振荡问题由 action_rate=-0.005（50×）+ success_bonus std=0.05 解决
++        init_noise_std=0.4,             # 1.0 → 0.4：阻断"噪声剥削"行为
++                                        # run5/run6 教训：init=1.0 → 策略发现大噪声随机碰中目标更高效
++                                        # → 锁定高噪声策略 → 确定性推理时卡在 5cm（run5）或训练发散（run6）
++                                        # init=0.4 ≈ σ_eq（action_rate=-0.005 时 σ_eq≈0.50）：
++                                        # 策略从未经历 σ>0.6 的高噪声阶段，无法发展噪声剥削
++                                        # 被迫学习主动精细接近而非依赖随机碰靶
+         actor_hidden_dims=[256, 128],   # [64,64] → [256,128]：扩大网络容量
+         critic_hidden_dims=[256, 128],
+         activation="elu",
+@@ -37,7 +39,10 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     algorithm = RslRlPpoAlgorithmCfg(
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+-        clip_param=0.2,
++        clip_param=0.1,                 # 0.2 → 0.1：防止 PPO 大步更新把好策略覆盖
++                                        # run7 教训：iter350 success=79%（σ=0.33），仅25iter后跌至25%
++                                        # noise 未变，说明是 policy gradient 的单次大幅更新导致崩溃
++                                        # clip=0.1 限制每次更新幅度，保留好策略
+         entropy_coef=0.01,              # 均衡分析：σ_eq = entropy_coef / (4×|action_rate|)
+                                         # 0.005 → σ_eq=0.25（太低，success 93%→27% 持续下滑）
+                                         # 0.02  → σ_eq=1.00（太高，noise 爆炸至 1.289）
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index d5e5d31..f1db47b 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -157,7 +157,9 @@ class RewardsCfg:
+     )
+ 
+     # action penalty
+-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)  # -0.0001 → -0.005：强力抑制目标附近极限环振荡
++    # action_rate=-0.005 配合 entropy_coef=0.01：σ_eq ≈ 3.5×0.01/√0.005 ≈ 0.50（探索期甜点）
++    # curriculum 在 ~500 RL iter 后升至 -0.01 → σ_eq≈0.35（稳定期）
++    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)
+     joint_vel = RewTerm(
+         func=mdp.joint_vel_l2,
+         weight=-0.0001,
+@@ -188,14 +190,23 @@ class TerminationsCfg:
+ class CurriculumCfg:
+     """Curriculum terms for the MDP."""
+ 
++    # common_step_counter 计数规则：每次 env.step() 调用 +1（每 RL iter = num_steps_per_env = 32 次调用）
++    # → 触发 RL iter = num_steps / 32
++    #
++    # 两阶段训练设计：
++    #   阶段1 (iter 0-500):   action_rate=-0.005 → σ_eq≈0.50，充足探索，学习精细接近
++    #   阶段2 (iter 500-3000): action_rate=-0.01  → σ_eq≈0.35，稳定收敛，抑制熵爆炸
+     action_rate = CurrTerm(
+-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -0.01, "num_steps": 2000}
+-        # -0.005 → -0.01：初始已强化，curriculum 继续加压；num_steps 2000 < max_iterations 确保生效
++        func=mdp.modify_reward_weight,
++        params={"term_name": "action_rate", "weight": -0.01, "num_steps": 16_000},
++        # 16_000 / 32 = 500 RL iters 时触发
+     )
+ 
++    # joint_vel 同理：阶段2 升至 -0.001（10×初始值），配合 action_rate 共同抑制振荡
+     joint_vel = CurrTerm(
+-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -0.005, "num_steps": 2000}
+-        # -0.0001 → -0.005：随训练进行逐步惩罚关节速度，稳定收敛后的停留姿态
++        func=mdp.modify_reward_weight,
++        params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 16_000},
++        # 16_000 / 32 = 500 RL iters 时触发
+     )
+ 
+ 

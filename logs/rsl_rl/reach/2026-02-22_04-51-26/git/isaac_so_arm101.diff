@@ -1,0 +1,241 @@
+--- git status ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/isaac_so_arm101/scripts/rsl_rl/train.py
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/mdp/rewards.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.spec-workflow/
+	assets/rm_eco65/urdf/ECO65-B/
+	docs/HeadlessTrainingFix.md
+	logs/rsl_rl/reach/2026-02-22_04-36-56/
+	logs/rsl_rl/reach/2026-02-22_04-39-56/
+	logs/rsl_rl/reach/2026-02-22_04-45-21/
+	logs/rsl_rl/reach/2026-02-22_04-51-26/
+	scripts/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/src/isaac_so_arm101/scripts/rsl_rl/train.py b/src/isaac_so_arm101/scripts/rsl_rl/train.py
+index 625b4c5..b5492d5 100644
+--- a/src/isaac_so_arm101/scripts/rsl_rl/train.py
++++ b/src/isaac_so_arm101/scripts/rsl_rl/train.py
+@@ -99,10 +99,11 @@ from isaaclab_tasks.utils.hydra import hydra_task_config
+ 
+ # PLACEHOLDER: Extension template (do not remove this comment)
+ 
+-torch.backends.cuda.matmul.allow_tf32 = True
+-torch.backends.cudnn.allow_tf32 = True
++torch.backends.cuda.matmul.allow_tf32 = True   # TF32 加速 matmul（Ampere+）
++torch.backends.cudnn.allow_tf32 = True          # TF32 加速 cuDNN 卷积
+ torch.backends.cudnn.deterministic = False
+-torch.backends.cudnn.benchmark = False
++torch.backends.cudnn.benchmark = True           # False→True：让 cuDNN 自动选最优卷积算法
++torch.set_float32_matmul_precision("high")      # 启用 Tensor Core FP32 融合路径（Blackwell 适用）
+ 
+ 
+ @hydra_task_config(args_cli.task, args_cli.agent)
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index ce361c8..b812ede 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -19,38 +19,37 @@ from isaaclab_rl.rsl_rl import (
+ @configclass
+ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     num_steps_per_env = 32          # 24 → 32：更多样本/更新轮，有助于 success 终止的稀疏轨迹
+-    max_iterations = 3000           # 1000 → 3000：给予足够训练量达到 >90% 成功率
++    max_iterations = 5000           # 3000 → 5000：扩展训练量，确保收敛至 >90% 成功率
+     save_interval = 50
+     experiment_name = "reach"
+     run_name = ""
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=0.4,             # 1.0 → 0.4：阻断"噪声剥削"行为
+-                                        # run5/run6 教训：init=1.0 → 策略发现大噪声随机碰中目标更高效
+-                                        # → 锁定高噪声策略 → 确定性推理时卡在 5cm（run5）或训练发散（run6）
+-                                        # init=0.4 ≈ σ_eq（action_rate=-0.005 时 σ_eq≈0.50）：
+-                                        # 策略从未经历 σ>0.6 的高噪声阶段，无法发展噪声剥削
+-                                        # 被迫学习主动精细接近而非依赖随机碰靶
+-        actor_hidden_dims=[256, 128],   # [64,64] → [256,128]：扩大网络容量
++        init_noise_std=0.3,             # 0.4 → 0.3：更接近 σ_eq=0.25 起点
++                                        # entropy_coef=0.005, action_rate=-0.005 → σ_eq≈0.25
++                                        # init=0.3 避免初期高噪探索阶段，直接在目标噪声区间
++        actor_hidden_dims=[256, 128],   # 保持：6DOF reach 任务容量足够
+         critic_hidden_dims=[256, 128],
+         activation="elu",
+     )
+     algorithm = RslRlPpoAlgorithmCfg(
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+-        clip_param=0.1,                 # 0.2 → 0.1：防止 PPO 大步更新把好策略覆盖
+-                                        # run7 教训：iter350 success=79%（σ=0.33），仅25iter后跌至25%
+-                                        # noise 未变，说明是 policy gradient 的单次大幅更新导致崩溃
+-                                        # clip=0.1 限制每次更新幅度，保留好策略
+-        entropy_coef=0.01,              # 均衡分析：σ_eq = entropy_coef / (4×|action_rate|)
+-                                        # 0.005 → σ_eq=0.25（太低，success 93%→27% 持续下滑）
+-                                        # 0.02  → σ_eq=1.00（太高，noise 爆炸至 1.289）
+-                                        # 0.01  → σ_eq=0.50（峰值成功率 93.4% 时的 noise 水平）
+-        num_learning_epochs=5,          # 8 → 5：减少每轮过拟合
++        clip_param=0.1,                 # 保持 0.1：防止大步更新破坏好策略（run7 教训）
++        entropy_coef=0.005,             # 0.01 → 0.005：关键改动！
++                                        # 新均衡分析（配合 step_alive_penalty）：
++                                        # σ_eq = entropy_coef / (4×|action_rate|)
++                                        # 阶段1: 0.005/(4×0.005)=0.25（vs run8的0.50）
++                                        # 阶段2: 0.005/(4×0.01)=0.125（vs run8的0.35）
++                                        # 低噪声 → 末端位置抖动小 → 突破 3cm 阈值更稳定
++                                        # run5教训：adaptive schedule+低entropy → LR衰减崩溃
++                                        # 本次固定LR=5e-5，维持充足梯度不会entropy collapse
++        num_learning_epochs=4,          # 5 → 4：减少每rollout过拟合次数，配合低LR更保守
+         num_mini_batches=4,
+-        learning_rate=1.0e-4,           # 3e-4 → 1e-4：fixed schedule 下使用更保守学习率
+-        schedule="fixed",               # adaptive → fixed：防止 KL 驱动 LR 衰减至 0（entropy collapse）
++        learning_rate=5.0e-5,           # 1e-4 → 5e-5：更保守更新，防止好策略被覆盖
++                                        # 与 clip_param=0.1 配合：双重限速保护高峰策略
++        schedule="fixed",               # 保持 fixed：防止 adaptive KL 驱动 LR 衰减至 0
+         gamma=0.99,
+         lam=0.95,
+         desired_kl=0.01,
+diff --git a/src/isaac_so_arm101/tasks/reach/mdp/rewards.py b/src/isaac_so_arm101/tasks/reach/mdp/rewards.py
+index 9c5911f..9ff75ae 100644
+--- a/src/isaac_so_arm101/tasks/reach/mdp/rewards.py
++++ b/src/isaac_so_arm101/tasks/reach/mdp/rewards.py
+@@ -86,3 +86,16 @@ def object_ee_distance_and_lifted(
+     lift_reward = object_is_lifted(env, minimal_height, object_cfg)
+     # Combine rewards multiplicatively
+     return reach_reward * lift_reward
++
++
++def step_alive_penalty(env: ManagerBasedRLEnv) -> torch.Tensor:
++    """每步固定惩罚 -1，配合 weight 系数形成时间压力。
++
++    原理：PPO 在 gamma=0.99 下已有折扣压力，但策略仍停在 5cm 局部最优。
++    本惩罚直接改变奖励景观：提前成功终止（少积累惩罚）> 拖延。
++    激励速度目标 <2s（60步）的核心机制：
++      - 60步成功  = -0.05 * 60 = -3.0
++      - 171步成功 = -0.05 * 171 = -8.55
++      差值 5.55 → 强制策略学快速运动路径
++    """
++    return -torch.ones(env.num_envs, device=env.device, dtype=torch.float32)
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index f1db47b..9c3fe15 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -16,6 +16,7 @@ from isaac_so_arm101.robots.trs_so100.so_arm100 import SO_ARM100_CFG
+ 
+ # import mdp
+ import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
++import isaac_so_arm101.tasks.reach.mdp as custom_mdp
+ from isaac_so_arm101.tasks.reach.mdp.terminations import ee_reached_goal
+ from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+ from isaaclab.envs import ManagerBasedRLEnvCfg
+@@ -78,7 +79,7 @@ class CommandsCfg:
+     ee_pose = mdp.UniformPoseCommandCfg(
+         asset_name="robot",
+         body_name=MISSING,
+-        resampling_time_range=(5.0, 5.0),
++        resampling_time_range=(3.0, 3.0),   # 5.0→3.0：缩短重采样窗口，强迫策略在3s内完成到达
+         debug_vis=True,
+         ranges=mdp.UniformPoseCommandCfg.Ranges(
+             pos_x=(-0.25, 0.25),
+@@ -152,25 +153,31 @@ class RewardsCfg:
+     )
+     end_effector_orientation_tracking = RewTerm(
+         func=mdp.orientation_command_error,
+-        weight=-0.1,
++        weight=-0.02,                       # -0.1→-0.02：减少姿态追踪占比，集中资源打位置精度
+         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "command_name": "ee_pose"},
+     )
+ 
+     # action penalty
+-    # action_rate=-0.005 配合 entropy_coef=0.01：σ_eq ≈ 3.5×0.01/√0.005 ≈ 0.50（探索期甜点）
+-    # curriculum 在 ~500 RL iter 后升至 -0.01 → σ_eq≈0.35（稳定期）
++    # action_rate=-0.005 配合 entropy_coef=0.005：σ_eq ≈ 0.005/(4×0.005) ≈ 0.25（低噪，精准）
++    # curriculum 在 ~250 RL iter 后升至 -0.01 → σ_eq≈0.125（更稳）
+     action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)
+     joint_vel = RewTerm(
+         func=mdp.joint_vel_l2,
+         weight=-0.0001,
+         params={"asset_cfg": SceneEntityCfg("robot")},
+     )
+-    # success bonus: tanh reward near target (std=0.05 → 5cm 内仍有强梯度，避免策略在 5~10cm 处失速)
++    # success bonus: std=0.03 匹配成功终止阈值(3cm)，weight=15.0 提供强梯度
++    # std=0.05→0.03：将高奖励区域收紧到 3cm 以内，强迫策略突破 5cm"假平原"
++    # weight=5.0→15.0：强化 3cm 内梯度，让移动到 3cm 比停在 5cm 显著更有利
+     success_bonus = RewTerm(
+         func=mdp.position_command_error_tanh,
+-        weight=5.0,
+-        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.05, "command_name": "ee_pose"},
++        weight=15.0,
++        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.03, "command_name": "ee_pose"},
+     )
++    # 时间压力惩罚：每步 -0.02，激励策略快速到达目标（课程后升至 -0.05）
++    # 初始 -0.02/步：先让策略在宽松压力下学会到达目标
++    # 课程后 -0.05/步：强化速度要求，推向 <2s 目标
++    step_alive = RewTerm(func=custom_mdp.step_alive_penalty, weight=0.02)
+ 
+ 
+ @configclass
+@@ -194,19 +201,28 @@ class CurriculumCfg:
+     # → 触发 RL iter = num_steps / 32
+     #
+     # 两阶段训练设计：
+-    #   阶段1 (iter 0-500):   action_rate=-0.005 → σ_eq≈0.50，充足探索，学习精细接近
+-    #   阶段2 (iter 500-3000): action_rate=-0.01  → σ_eq≈0.35，稳定收敛，抑制熵爆炸
++    #   阶段1 (iter 0-250):   action_rate=-0.005 → σ_eq≈0.25，精准探索，建立基础运动
++    #   阶段2 (iter 250-5000): action_rate=-0.01  → σ_eq≈0.125，低噪稳定，精确到达
+     action_rate = CurrTerm(
+         func=mdp.modify_reward_weight,
+-        params={"term_name": "action_rate", "weight": -0.01, "num_steps": 16_000},
+-        # 16_000 / 32 = 500 RL iters 时触发
++        params={"term_name": "action_rate", "weight": -0.01, "num_steps": 8_000},
++        # 8_000 / 32 = 250 RL iters 时触发（比原来提前2倍，更快收紧噪声）
+     )
+ 
+-    # joint_vel 同理：阶段2 升至 -0.001（10×初始值），配合 action_rate 共同抑制振荡
++    # joint_vel 同理：阶段2 升至 -0.001，配合 action_rate 共同抑制振荡
+     joint_vel = CurrTerm(
+         func=mdp.modify_reward_weight,
+-        params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 16_000},
+-        # 16_000 / 32 = 500 RL iters 时触发
++        params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 8_000},
++        # 8_000 / 32 = 250 RL iters 时触发
++    )
++
++    # step_alive 惩罚 curriculum：从 -0.02/步 升至 -0.05/步，逐步增加速度压力
++    # 阶段1(初期): -0.02/步 → 先让策略学会到达，不要太早施压
++    # 阶段2(iter500+): -0.05/步 → 强化速度要求，推向 <2s 目标
++    step_alive_final = CurrTerm(
++        func=mdp.modify_reward_weight,
++        params={"term_name": "step_alive", "weight": 0.05, "num_steps": 16_000},
++        # 16_000 / 32 = 500 RL iters 时 weight 升至 0.05（实际惩罚 -0.05/步）
+     )
+ 
+ 
+@@ -220,7 +236,7 @@ class ReachEnvCfg(ManagerBasedRLEnvCfg):
+     """Configuration for the reach end-effector pose tracking environment."""
+ 
+     # Scene settings
+-    scene: ReachSceneCfg = ReachSceneCfg(num_envs=4096, env_spacing=2.5)
++    scene: ReachSceneCfg = ReachSceneCfg(num_envs=16384, env_spacing=2.5)  # 4096→16384：充分利用 RTX 5090 32GB VRAM（实测 0.9MB/env，16384≈14.7GB，显存利用率 4x↑）
+     # Basic settings
+     observations: ObservationsCfg = ObservationsCfg()
+     actions: ActionsCfg = ActionsCfg()
+@@ -236,7 +252,7 @@ class ReachEnvCfg(ManagerBasedRLEnvCfg):
+         # general settings
+         self.decimation = 2
+         self.sim.render_interval = self.decimation
+-        self.episode_length_s = 12.0
++        self.episode_length_s = 8.0         # 12.0→8.0：缩短最大episode，迫使策略更积极
+         self.viewer.eye = (2.5, 2.5, 1.5)
+         # simulation settings
+         self.sim.dt = 1.0 / 60.0

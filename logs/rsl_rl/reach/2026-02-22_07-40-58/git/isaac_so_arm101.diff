@@ -1,0 +1,71 @@
+--- git status ---
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.serena/
+	logs/rsl_rl/reach/2026-02-22_06-55-05/
+	logs/rsl_rl/reach/2026-02-22_07-40-58/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 819e3f4..b718d57 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -35,19 +35,19 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+         clip_param=0.1,                 # 保持 0.1：防止大步更新破坏好策略（run7 教训）
+-        entropy_coef=0.005,             # 精细调参：0.005→0.015→0.010→0.005（4轮收敛）
+-                                        # 数据驱动决策（4轮实验）：
++        entropy_coef=0.008,             # 精细调参：0.005→0.015→0.010→0.005→0.008（5轮收敛）
++                                        # 数据驱动决策（5轮实验）：
+                                         #   run9 (0.005): σ卡在0.24→崩溃至0.14，原因：step_alive在iter500触发（峰值点）
+                                         #   run10(0.015): σ锁在0.60，精度不足，98%→46%下滑
+                                         #   run11(0.010): σ卡在0.47-0.55均衡（实测 vs 理论0.25），33-38%下滑
+-                                        #   run12(0.005): 预期σ≈0.30，step_alive已移至iter1500，不会复现run9崩溃
+-                                        # run9 vs run12 的本质区别：
+-                                        #   run9：step_alive在iter500触发 → 在最脆弱时刻施压 → 熵崩溃
+-                                        #   run12：step_alive在iter1500触发（策略稳定后）→ 不崩溃
++                                        #   run12(0.005): 熵在iter~800再次崩溃至-2.69，63%停滞；根因：平衡σ_eq=0.0125过低
++                                        #   run13(0.008): 目标σ_eq≈0.20，预期σ_actual≈0.40（介于run11的0.50和run12的崩溃之间）
+                                         # 数学推导：σ_eq ≈ entropy_coef / (4×|action_rate_p2|)
+-                                        #   phase2(iter≥250): 0.005/(4×0.010)=0.125（理论下界）
+-                                        #   实际 σ 受网络动力学影响约 2-3x：预期 σ_actual≈0.25-0.35
+-                                        # init_noise_std=0.5 提供充足初始探索，逐步收敛
++                                        #   phase2(iter≥250): 0.008/(4×0.010)=0.20（理论下界）
++                                        #   实际 σ 受网络动力学影响约 2x：预期 σ_actual≈0.35-0.45
++                                        #   此区间是 run11(过探索) 和 run12(欠探索) 之间唯一未测试的甜蜜点
++                                        # 配合 step_alive curriculum 移至 iter3000（96_000 steps）
++                                        #   确保策略在 >70% 成功率稳定后再施加速度压力
+         num_learning_epochs=4,          # 保持 4：配合低LR更保守
+         num_mini_batches=4,
+         learning_rate=5.0e-5,           # 保持 5e-5：保守更新防止好策略被覆盖
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index b430b83..6335474 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -225,11 +225,12 @@ class CurriculumCfg:
+ 
+     # step_alive 惩罚 curriculum：从 -0.02/步 升至 -0.05/步，逐步增加速度压力
+     # 根因修复：上次训练在 iter 500（策略峰值）突然施加压力 → 熵崩溃（-0.8 → -4.6）→ 成功率 85%→7%
+-    # 修复：延迟到 48_000 steps = 1500 RL iters，确保策略在 >70% 成功率稳定后再加速度压力
++    # 二次修复：iter 1490 时成功率仅 42%（目标 >70%），48_000 steps 触发过早
++    # 延迟到 96_000 steps = 3000 RL iters，给策略足够时间稳定在 70% 成功率以上
+     step_alive_final = CurrTerm(
+         func=mdp.modify_reward_weight,
+-        params={"term_name": "step_alive", "weight": 0.05, "num_steps": 48_000},
+-        # 48_000 / 32 = 1500 RL iters 时触发（vs 原来 500 iters，延迟 3×）
++        params={"term_name": "step_alive", "weight": 0.05, "num_steps": 96_000},
++        # 96_000 / 32 = 3000 RL iters 时触发（vs 之前 1500 iters，再延迟 2×）
+     )
+ 
+ 

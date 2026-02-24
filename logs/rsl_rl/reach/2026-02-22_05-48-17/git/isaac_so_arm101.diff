@@ -1,0 +1,214 @@
+--- git status ---
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   logs/rsl_rl/reach/2026-02-22_04-59-41/events.out.tfevents.1771736428.markgosling-p8zf00g3n2kj-main.13263.0
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/mdp/observations.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.serena/
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1000.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1050.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1100.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1150.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1200.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1250.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1300.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1350.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1400.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1450.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1500.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1550.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1600.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1650.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1700.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1750.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1800.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1850.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1900.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_1950.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2000.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2050.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2100.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2150.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2200.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2250.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2300.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2350.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2400.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2450.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2500.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2550.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2600.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2650.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2700.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2750.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2800.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2850.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2900.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_2950.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_3000.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_3050.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_3100.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_3150.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_3200.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_800.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_850.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_900.pt
+	logs/rsl_rl/reach/2026-02-22_04-59-41/model_950.pt
+	logs/rsl_rl/reach/2026-02-22_05-48-17/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/logs/rsl_rl/reach/2026-02-22_04-59-41/events.out.tfevents.1771736428.markgosling-p8zf00g3n2kj-main.13263.0 b/logs/rsl_rl/reach/2026-02-22_04-59-41/events.out.tfevents.1771736428.markgosling-p8zf00g3n2kj-main.13263.0
+index 8e7dcd7..37d2f5f 100644
+Binary files a/logs/rsl_rl/reach/2026-02-22_04-59-41/events.out.tfevents.1771736428.markgosling-p8zf00g3n2kj-main.13263.0 and b/logs/rsl_rl/reach/2026-02-22_04-59-41/events.out.tfevents.1771736428.markgosling-p8zf00g3n2kj-main.13263.0 differ
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index b812ede..bcdd63b 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -26,29 +26,22 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=0.3,             # 0.4 → 0.3：更接近 σ_eq=0.25 起点
+-                                        # entropy_coef=0.005, action_rate=-0.005 → σ_eq≈0.25
+-                                        # init=0.3 避免初期高噪探索阶段，直接在目标噪声区间
+-        actor_hidden_dims=[256, 128],   # 保持：6DOF reach 任务容量足够
+-        critic_hidden_dims=[256, 128],
++        init_noise_std=0.5,             # 0.3 → 0.5：更充足的初始探索，让策略在早期覆盖更大工作空间
++        actor_hidden_dims=[512, 256],   # [256,128]→[512,256]：扩大容量学习6DOF隐式正运动学 + ee_pos新观察
++        critic_hidden_dims=[512, 256],  # 3x参数量（180K vs 60K），32768并行×32步=1M样本/更新完全驾驭
+         activation="elu",
+     )
+     algorithm = RslRlPpoAlgorithmCfg(
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+         clip_param=0.1,                 # 保持 0.1：防止大步更新破坏好策略（run7 教训）
+-        entropy_coef=0.005,             # 0.01 → 0.005：关键改动！
+-                                        # 新均衡分析（配合 step_alive_penalty）：
+-                                        # σ_eq = entropy_coef / (4×|action_rate|)
+-                                        # 阶段1: 0.005/(4×0.005)=0.25（vs run8的0.50）
+-                                        # 阶段2: 0.005/(4×0.01)=0.125（vs run8的0.35）
+-                                        # 低噪声 → 末端位置抖动小 → 突破 3cm 阈值更稳定
+-                                        # run5教训：adaptive schedule+低entropy → LR衰减崩溃
+-                                        # 本次固定LR=5e-5，维持充足梯度不会entropy collapse
+-        num_learning_epochs=4,          # 5 → 4：减少每rollout过拟合次数，配合低LR更保守
++        entropy_coef=0.015,             # 0.005 → 0.015：核心修复！防止熵崩溃
++                                        # 上次熵从 +1.3 崩溃到 -4.6（σ: 0.30→0.145）
++                                        # 0.015 将 phase2 均衡噪声从 0.125 提高到 0.375，
++                                        # 保持充足探索能力，策略不会过早确定化
++        num_learning_epochs=4,          # 保持 4：配合低LR更保守
+         num_mini_batches=4,
+-        learning_rate=5.0e-5,           # 1e-4 → 5e-5：更保守更新，防止好策略被覆盖
+-                                        # 与 clip_param=0.1 配合：双重限速保护高峰策略
++        learning_rate=5.0e-5,           # 保持 5e-5：保守更新防止好策略被覆盖
+         schedule="fixed",               # 保持 fixed：防止 adaptive KL 驱动 LR 衰减至 0
+         gamma=0.99,
+         lam=0.95,
+diff --git a/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py b/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+index b97a1d2..ba74e5c 100644
+--- a/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+@@ -42,6 +42,8 @@ class SoArm100ReachEnvCfg(ReachEnvCfg):
+         self.rewards.success_bonus.params["asset_cfg"].body_names = ["link_6"]
+         # override terminations - 成功终止检测 link_6 是否到达目标
+         self.terminations.success.params["asset_cfg"].body_names = ["link_6"]
++        # override observations - ee_pos 观察末端 link_6 当前位置
++        self.observations.policy.ee_pos.params["asset_cfg"].body_names = ["link_6"]
+ 
+         # override actions - ECO65 6轴关节名为 joint1~joint6
+         self.actions.arm_action = mdp.JointPositionActionCfg(
+@@ -83,6 +85,8 @@ class SoArm101ReachEnvCfg(ReachEnvCfg):
+         self.rewards.success_bonus.params["asset_cfg"].body_names = ["gripper_link"]
+         # override terminations
+         self.terminations.success.params["asset_cfg"].body_names = ["gripper_link"]
++        # override observations - ee_pos 观察末端 gripper_link 当前位置
++        self.observations.policy.ee_pos.params["asset_cfg"].body_names = ["gripper_link"]
+ 
+         self.rewards.end_effector_orientation_tracking.weight = 0.0
+ 
+diff --git a/src/isaac_so_arm101/tasks/reach/mdp/observations.py b/src/isaac_so_arm101/tasks/reach/mdp/observations.py
+index de10c34..6af53e6 100644
+--- a/src/isaac_so_arm101/tasks/reach/mdp/observations.py
++++ b/src/isaac_so_arm101/tasks/reach/mdp/observations.py
+@@ -13,7 +13,7 @@ from __future__ import annotations
+ from typing import TYPE_CHECKING
+ 
+ import torch
+-from isaaclab.assets import RigidObject
++from isaaclab.assets import Articulation, RigidObject
+ from isaaclab.managers import SceneEntityCfg
+ from isaaclab.utils.math import subtract_frame_transforms
+ 
+@@ -34,3 +34,28 @@ def object_position_in_robot_root_frame(
+         robot.data.root_state_w[:, :3], robot.data.root_state_w[:, 3:7], object_pos_w
+     )
+     return object_pos_b
++
++
++def ee_pos_b(
++    env: ManagerBasedRLEnv,
++    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
++) -> torch.Tensor:
++    """末端执行器在机器人基座坐标系中的3D位置 (num_envs, 3)。
++
++    与 generated_commands 中的目标位置（也在基座坐标系）保持一致，
++    让策略可直接计算 target_pos_b - ee_pos_b 误差向量，无需隐式学习正运动学。
++
++    Args:
++        env: RL 环境。
++        asset_cfg: 机器人关节配置，body_names 需设为末端执行器链接名称。
++    """
++    robot: Articulation = env.scene[asset_cfg.name]
++    # 末端执行器在世界坐标系中的位置 (num_envs, 3)
++    ee_pos_w = robot.data.body_pos_w[:, asset_cfg.body_ids[0], :3]
++    # 转换到机器人基座坐标系
++    ee_pos_b_frame, _ = subtract_frame_transforms(
++        robot.data.root_state_w[:, :3],
++        robot.data.root_state_w[:, 3:7],
++        ee_pos_w,
++    )
++    return ee_pos_b_frame
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index b173b68..b430b83 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -113,6 +113,13 @@ class ObservationsCfg:
+         joint_vel = ObsTerm(func=mdp.joint_vel_rel, noise=Unoise(n_min=-0.01, n_max=0.01))
+         pose_command = ObsTerm(func=mdp.generated_commands, params={"command_name": "ee_pose"})
+         actions = ObsTerm(func=mdp.last_action)
++        # 末端执行器当前位置（基座坐标系，3D）
++        # 与 pose_command 中目标位置坐标系一致，策略可直接感知误差向量
++        # body_names 由子类（joint_pos_env_cfg.py）覆写为具体末端链接名
++        ee_pos = ObsTerm(
++            func=custom_mdp.ee_pos_b,
++            params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING)},
++        )
+ 
+         def __post_init__(self):
+             self.enable_corruption = True
+@@ -217,12 +224,12 @@ class CurriculumCfg:
+     )
+ 
+     # step_alive 惩罚 curriculum：从 -0.02/步 升至 -0.05/步，逐步增加速度压力
+-    # 阶段1(初期): -0.02/步 → 先让策略学会到达，不要太早施压
+-    # 阶段2(iter500+): -0.05/步 → 强化速度要求，推向 <2s 目标
++    # 根因修复：上次训练在 iter 500（策略峰值）突然施加压力 → 熵崩溃（-0.8 → -4.6）→ 成功率 85%→7%
++    # 修复：延迟到 48_000 steps = 1500 RL iters，确保策略在 >70% 成功率稳定后再加速度压力
+     step_alive_final = CurrTerm(
+         func=mdp.modify_reward_weight,
+-        params={"term_name": "step_alive", "weight": 0.05, "num_steps": 16_000},
+-        # 16_000 / 32 = 500 RL iters 时 weight 升至 0.05（实际惩罚 -0.05/步）
++        params={"term_name": "step_alive", "weight": 0.05, "num_steps": 48_000},
++        # 48_000 / 32 = 1500 RL iters 时触发（vs 原来 500 iters，延迟 3×）
+     )
+ 
+ 

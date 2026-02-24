@@ -1,0 +1,192 @@
+--- git status ---
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.serena/
+	logs/rsl_rl/reach/2026-02-22_06-55-05/
+	logs/rsl_rl/reach/2026-02-22_07-40-58/
+	logs/rsl_rl/reach/2026-02-22_09-11-15/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 819e3f4..ed9e95a 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -18,42 +18,45 @@ from isaaclab_rl.rsl_rl import (
+ 
+ @configclass
+ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+-    num_steps_per_env = 32          # 24 → 32：更多样本/更新轮，有助于 success 终止的稀疏轨迹
+-    max_iterations = 5000           # 3000 → 5000：扩展训练量，确保收敛至 >90% 成功率
++    num_steps_per_env = 32          # 保持 32：1M 样本/更新，覆盖稀疏成功轨迹
++    max_iterations = 3000           # 5000→3000：稳定训练下 iter~300 即达峰，3000 足够收敛
+     save_interval = 50
+     experiment_name = "reach"
+     run_name = ""
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=0.5,             # 0.3 → 0.5：更充足的初始探索，让策略在早期覆盖更大工作空间
+-        actor_hidden_dims=[512, 256],   # [256,128]→[512,256]：扩大容量学习6DOF隐式正运动学 + ee_pos新观察
+-        critic_hidden_dims=[512, 256],  # 3x参数量（180K vs 60K），32768并行×32步=1M样本/更新完全驾驭
++        init_noise_std=0.5,             # 保持 0.5：充足的初始探索
++        actor_hidden_dims=[512, 256],   # 保持：大容量网络学习 6DOF 隐式正运动学
++        critic_hidden_dims=[512, 256],
+         activation="elu",
+     )
+     algorithm = RslRlPpoAlgorithmCfg(
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+-        clip_param=0.1,                 # 保持 0.1：防止大步更新破坏好策略（run7 教训）
+-        entropy_coef=0.005,             # 精细调参：0.005→0.015→0.010→0.005（4轮收敛）
+-                                        # 数据驱动决策（4轮实验）：
+-                                        #   run9 (0.005): σ卡在0.24→崩溃至0.14，原因：step_alive在iter500触发（峰值点）
+-                                        #   run10(0.015): σ锁在0.60，精度不足，98%→46%下滑
+-                                        #   run11(0.010): σ卡在0.47-0.55均衡（实测 vs 理论0.25），33-38%下滑
+-                                        #   run12(0.005): 预期σ≈0.30，step_alive已移至iter1500，不会复现run9崩溃
+-                                        # run9 vs run12 的本质区别：
+-                                        #   run9：step_alive在iter500触发 → 在最脆弱时刻施压 → 熵崩溃
+-                                        #   run12：step_alive在iter1500触发（策略稳定后）→ 不崩溃
+-                                        # 数学推导：σ_eq ≈ entropy_coef / (4×|action_rate_p2|)
+-                                        #   phase2(iter≥250): 0.005/(4×0.010)=0.125（理论下界）
+-                                        #   实际 σ 受网络动力学影响约 2-3x：预期 σ_actual≈0.25-0.35
+-                                        # init_noise_std=0.5 提供充足初始探索，逐步收敛
+-        num_learning_epochs=4,          # 保持 4：配合低LR更保守
+-        num_mini_batches=4,
+-        learning_rate=5.0e-5,           # 保持 5e-5：保守更新防止好策略被覆盖
+-        schedule="fixed",               # 保持 fixed：防止 adaptive KL 驱动 LR 衰减至 0
++        clip_param=0.1,                 # 保持 0.1
++        entropy_coef=0.01,              # 0.008→0.01：run14 根因修复
++                                        # 根因诊断（跨 5 run 数据分析）：
++                                        #   所有 run 的崩溃根因 = 奖励分布阶跃变化（课程触发）→ Critic 发散
++                                        #   run10(0.015): iter250 action_rate课程触发时 success=98.1%，Value Loss 立刻从 0.013→0.022+
++                                        #   run13(0.008): iter3000 step_alive课程触发 → Surrogate Loss 变正 + Value Loss 9x飙升
++                                        #   run14 修复策略：彻底消除所有课程变化，直接使用终态奖励权重
++                                        # σ_eq 推导（无课程，常数奖励）：
++                                        #   σ_eq ≈ entropy_coef / (4 × |action_rate|) = 0.01 / (4 × 0.01) = 0.25（理论）
++                                        #   实测约 2x：σ_actual ≈ 0.45~0.55（与 run11 相同区间，run11 max=97.7%）
++        num_learning_epochs=6,          # 4→6：更多 Critic 迭代次数，对抗 Value Loss 发散
++                                        # 每 rollout 更新次数：6×4=24 次（vs 之前 16 次）
++                                        # 配合 adaptive LR，Critic 能更充分拟合当前策略的 return 分布
++        num_mini_batches=4,             # 保持 4：每 mini-batch 262K 样本（1M/4），规模充足
++        learning_rate=1e-3,             # 5e-5→1e-3：adaptive 模式下的初始值，KL 触发后自动降低
++                                        # adaptive schedule 实际运行 LR 约在 1e-4~3e-4 区间（根据 KL 自调）
++        schedule="adaptive",            # fixed→adaptive：run14 最关键修复
++                                        # 原因：fixed LR=5e-5 在奖励分布稳定（无课程）时也会因
++                                        #   策略/价值函数的非平稳性导致 Critic 无法跟上 → 振荡
++                                        # adaptive 机制：KL>desired_kl → LR减半；KL<desired_kl/2 → LR翻倍
++                                        # 效果：自动平衡更新步长，Critic 发散时自动降速保护
+         gamma=0.99,
+         lam=0.95,
+-        desired_kl=0.01,
++        desired_kl=0.01,                # 保持：KL 目标 1%，合理更新步长上限
+         max_grad_norm=1.0,
+     )
+\ No newline at end of file
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index b430b83..102f183 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -21,7 +21,7 @@ from isaac_so_arm101.tasks.reach.mdp.terminations import ee_reached_goal
+ from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+ from isaaclab.envs import ManagerBasedRLEnvCfg
+ from isaaclab.managers import ActionTermCfg as ActionTerm
+-from isaaclab.managers import CurriculumTermCfg as CurrTerm
++
+ from isaaclab.managers import EventTermCfg as EventTerm
+ from isaaclab.managers import ObservationGroupCfg as ObsGroup
+ from isaaclab.managers import ObservationTermCfg as ObsTerm
+@@ -165,26 +165,27 @@ class RewardsCfg:
+     )
+ 
+     # action penalty
+-    # action_rate=-0.005 配合 entropy_coef=0.005：σ_eq ≈ 0.005/(4×0.005) ≈ 0.25（低噪，精准）
+-    # curriculum 在 ~250 RL iter 后升至 -0.01 → σ_eq≈0.125（更稳）
+-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)
++    # run14 根因修复：直接使用终态权重，消除 iter=250 的课程阶跃
++    # 根因数据：run10 在 iter250 action_rate:-0.005→-0.01 后 Value Loss 立刻从 0.013→0.022+
++    # σ_eq = entropy_coef / (4×|action_rate|) = 0.01/(4×0.01) = 0.25（理论）
++    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.01)    # -0.005→-0.01（消除课程）
+     joint_vel = RewTerm(
+         func=mdp.joint_vel_l2,
+-        weight=-0.0001,
++        weight=-0.001,                                                # -0.0001→-0.001（消除课程）
+         params={"asset_cfg": SceneEntityCfg("robot")},
+     )
+-    # success bonus: std=0.03 匹配成功终止阈值(3cm)，weight=15.0 提供强梯度
+-    # std=0.05→0.03：将高奖励区域收紧到 3cm 以内，强迫策略突破 5cm"假平原"
+-    # weight=5.0→15.0：强化 3cm 内梯度，让移动到 3cm 比停在 5cm 显著更有利
++    # success bonus: 保持不变，std=0.03 精准激励最后 3cm
+     success_bonus = RewTerm(
+         func=mdp.position_command_error_tanh,
+         weight=15.0,
+         params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.03, "command_name": "ee_pose"},
+     )
+-    # 时间压力惩罚：每步 -0.02，激励策略快速到达目标（课程后升至 -0.05）
+-    # 初始 -0.02/步：先让策略在宽松压力下学会到达目标
+-    # 课程后 -0.05/步：强化速度要求，推向 <2s 目标
+-    step_alive = RewTerm(func=custom_mdp.step_alive_penalty, weight=0.02)
++    # 时间压力：直接使用终态 -0.05/步，消除 iter=3000 的课程阶跃
++    # 激励机制验证（run10 峰值 iter~280，ep_len=55步=1.83s）：
++    #   -0.05 × 55步 = -2.75（快速成功）vs -0.05 × 220步 = -11.0（超时）
++    #   差值 8.25 >> success_bonus ≈ 3.6（@3cm 末步）→ 充足的速度压力
++    # 目标 <2s = 60步：-0.05×60 = -3.0；<3s = 90步：-0.05×90 = -4.5，差值 1.5/episode
++    step_alive = RewTerm(func=custom_mdp.step_alive_penalty, weight=0.05)  # 0.02→0.05（消除课程）
+ 
+ 
+ @configclass
+@@ -202,35 +203,16 @@ class TerminationsCfg:
+ 
+ @configclass
+ class CurriculumCfg:
+-    """Curriculum terms for the MDP."""
+-
+-    # common_step_counter 计数规则：每次 env.step() 调用 +1（每 RL iter = num_steps_per_env = 32 次调用）
+-    # → 触发 RL iter = num_steps / 32
+-    #
+-    # 两阶段训练设计：
+-    #   阶段1 (iter 0-250):   action_rate=-0.005 → σ_eq≈0.25，精准探索，建立基础运动
+-    #   阶段2 (iter 250-5000): action_rate=-0.01  → σ_eq≈0.125，低噪稳定，精确到达
+-    action_rate = CurrTerm(
+-        func=mdp.modify_reward_weight,
+-        params={"term_name": "action_rate", "weight": -0.01, "num_steps": 8_000},
+-        # 8_000 / 32 = 250 RL iters 时触发（比原来提前2倍，更快收紧噪声）
+-    )
+-
+-    # joint_vel 同理：阶段2 升至 -0.001，配合 action_rate 共同抑制振荡
+-    joint_vel = CurrTerm(
+-        func=mdp.modify_reward_weight,
+-        params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 8_000},
+-        # 8_000 / 32 = 250 RL iters 时触发
+-    )
+-
+-    # step_alive 惩罚 curriculum：从 -0.02/步 升至 -0.05/步，逐步增加速度压力
+-    # 根因修复：上次训练在 iter 500（策略峰值）突然施加压力 → 熵崩溃（-0.8 → -4.6）→ 成功率 85%→7%
+-    # 修复：延迟到 48_000 steps = 1500 RL iters，确保策略在 >70% 成功率稳定后再加速度压力
+-    step_alive_final = CurrTerm(
+-        func=mdp.modify_reward_weight,
+-        params={"term_name": "step_alive", "weight": 0.05, "num_steps": 48_000},
+-        # 48_000 / 32 = 1500 RL iters 时触发（vs 原来 500 iters，延迟 3×）
+-    )
++    """Curriculum terms for the MDP.
++
++    run14 根因修复：彻底移除所有课程变化。
++    数据分析（5 run 对比）证明：所有 run 的 Critic 发散都在课程触发时启动。
++      - run10 iter250 (action_rate 课程) → Value Loss 立刻从 0.013 → 0.022+
++      - run13 iter3000 (step_alive 课程) → Value Loss 飙升 9x，Surrogate Loss 变正
++    奖励权重已在 RewardsCfg 中直接设为终态值，无需课程渐变。
++    保留空类以兼容 ReachEnvCfg 的 curriculum 字段签名。
++    """
++    pass
+ 
+ 
+ ##

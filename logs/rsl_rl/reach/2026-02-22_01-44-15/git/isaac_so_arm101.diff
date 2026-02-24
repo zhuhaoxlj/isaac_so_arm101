@@ -1,0 +1,231 @@
+--- git status ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   pyproject.toml
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/mdp/terminations.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	2.png
+	2026-02-22-014417-this-session-is-being-continued-from-a-previous-co.txt
+	3.png
+	4.png
+	logs/rsl_rl/reach/2026-02-22_00-53-16/
+	logs/rsl_rl/reach/2026-02-22_01-44-15/
+	src/isaac_so_arm101/scripts/rsl_rl/play_traj.py
+	trajectory_logs/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/pyproject.toml b/pyproject.toml
+index 8c3d531..c0006e6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -16,6 +16,7 @@ dependencies = [
+ [project.scripts]
+ train = "isaac_so_arm101.scripts.rsl_rl.train:main"
+ play = "isaac_so_arm101.scripts.rsl_rl.play:main"
++play_traj = "isaac_so_arm101.scripts.rsl_rl.play_traj:main"
+ list_envs = "isaac_so_arm101.scripts.list_envs:main"
+ zero_agent = "isaac_so_arm101.scripts.zero_agent:main"
+ random_agent = "isaac_so_arm101.scripts.random_agent:main"
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 9690bf8..7f86694 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -18,28 +18,28 @@ from isaaclab_rl.rsl_rl import (
+ 
+ @configclass
+ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+-    num_steps_per_env = 24
+-    max_iterations = 1000
++    num_steps_per_env = 32          # 24 → 32：更多样本/更新轮，有助于 success 终止的稀疏轨迹
++    max_iterations = 3000           # 1000 → 3000：给予足够训练量达到 >90% 成功率
+     save_interval = 50
+     experiment_name = "reach"
+     run_name = ""
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=1.0,
+-        actor_hidden_dims=[64, 64],
+-        critic_hidden_dims=[64, 64],
++        init_noise_std=0.2,             # 1.0 → 0.2：降低动作噪声，消除目标附近超调和极限环
++        actor_hidden_dims=[256, 128],   # [64,64] → [256,128]：扩大网络容量
++        critic_hidden_dims=[256, 128],
+         activation="elu",
+     )
+     algorithm = RslRlPpoAlgorithmCfg(
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+         clip_param=0.2,
+-        entropy_coef=0.001,
+-        num_learning_epochs=8,
++        entropy_coef=0.02,              # 0.005 → 0.02：配合低 init_noise_std 保持探索能力
++        num_learning_epochs=5,          # 8 → 5：减少每轮过拟合
+         num_mini_batches=4,
+-        learning_rate=1.0e-3,
+-        schedule="adaptive",
++        learning_rate=1.0e-4,           # 3e-4 → 1e-4：fixed schedule 下使用更保守学习率
++        schedule="fixed",               # adaptive → fixed：防止 KL 驱动 LR 衰减至 0（entropy collapse）
+         gamma=0.99,
+         lam=0.95,
+         desired_kl=0.01,
+diff --git a/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py b/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+index 62d312e..b97a1d2 100644
+--- a/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+@@ -39,6 +39,9 @@ class SoArm100ReachEnvCfg(ReachEnvCfg):
+         self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["link_6"]
+         self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["link_6"]
+         self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["link_6"]
++        self.rewards.success_bonus.params["asset_cfg"].body_names = ["link_6"]
++        # override terminations - 成功终止检测 link_6 是否到达目标
++        self.terminations.success.params["asset_cfg"].body_names = ["link_6"]
+ 
+         # override actions - ECO65 6轴关节名为 joint1~joint6
+         self.actions.arm_action = mdp.JointPositionActionCfg(
+@@ -77,6 +80,9 @@ class SoArm101ReachEnvCfg(ReachEnvCfg):
+         self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["gripper_link"]
+         self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["gripper_link"]
+         self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["gripper_link"]
++        self.rewards.success_bonus.params["asset_cfg"].body_names = ["gripper_link"]
++        # override terminations
++        self.terminations.success.params["asset_cfg"].body_names = ["gripper_link"]
+ 
+         self.rewards.end_effector_orientation_tracking.weight = 0.0
+ 
+diff --git a/src/isaac_so_arm101/tasks/reach/mdp/terminations.py b/src/isaac_so_arm101/tasks/reach/mdp/terminations.py
+index bc35724..8b74a0f 100644
+--- a/src/isaac_so_arm101/tasks/reach/mdp/terminations.py
++++ b/src/isaac_so_arm101/tasks/reach/mdp/terminations.py
+@@ -27,6 +27,33 @@ if TYPE_CHECKING:
+     from isaaclab.envs import ManagerBasedRLEnv
+ 
+ 
++def ee_reached_goal(
++    env: ManagerBasedRLEnv,
++    command_name: str = "ee_pose",
++    threshold: float = 0.03,
++    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
++) -> torch.Tensor:
++    """Terminate when end-effector is within threshold (meters) of the target position.
++
++    Args:
++        env: The RL environment.
++        command_name: Name of the pose command. Defaults to "ee_pose".
++        threshold: Distance threshold in meters to consider as success. Defaults to 0.03 (3 cm).
++        asset_cfg: The robot articulation config with body_names set to the end-effector link.
++    """
++    from isaaclab.assets import Articulation
++
++    robot: Articulation = env.scene[asset_cfg.name]
++    command = env.command_manager.get_command(command_name)
++    # target position: command frame (robot base) → world frame
++    des_pos_b = command[:, :3]
++    des_pos_w, _ = combine_frame_transforms(robot.data.root_pos_w, robot.data.root_quat_w, des_pos_b)
++    # end-effector current position in world frame
++    curr_pos_w = robot.data.body_pos_w[:, asset_cfg.body_ids[0]]
++    distance = torch.norm(curr_pos_w - des_pos_w, dim=1)
++    return distance < threshold
++
++
+ def object_reached_goal(
+     env: ManagerBasedRLEnv,
+     command_name: str = "object_pose",
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index 0ea3b42..d5e5d31 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -16,6 +16,7 @@ from isaac_so_arm101.robots.trs_so100.so_arm100 import SO_ARM100_CFG
+ 
+ # import mdp
+ import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
++from isaac_so_arm101.tasks.reach.mdp.terminations import ee_reached_goal
+ from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+ from isaaclab.envs import ManagerBasedRLEnvCfg
+ from isaaclab.managers import ActionTermCfg as ActionTerm
+@@ -80,9 +81,9 @@ class CommandsCfg:
+         resampling_time_range=(5.0, 5.0),
+         debug_vis=True,
+         ranges=mdp.UniformPoseCommandCfg.Ranges(
+-            pos_x=(-0.1, 0.1),
+-            pos_y=(-0.25, -0.1),
+-            pos_z=(0.1, 0.3),
++            pos_x=(-0.25, 0.25),
++            pos_y=(-0.35, -0.05),
++            pos_z=(0.05, 0.40),
+             roll=(0.0, 0.0),
+             pitch=(0.0, 0.0),
+             yaw=(0.0, 0.0),
+@@ -125,10 +126,10 @@ class EventCfg:
+     """Configuration for events."""
+ 
+     reset_robot_joints = EventTerm(
+-        func=mdp.reset_joints_by_scale,
++        func=mdp.reset_joints_by_offset,
+         mode="reset",
+         params={
+-            "position_range": (0.5, 1.5),
++            "position_range": (-0.5, 0.5),  # ±0.5 rad (~±29°) 随机初始关节角，覆盖更多起始状态
+             "velocity_range": (0.0, 0.0),
+         },
+     )
+@@ -156,12 +157,18 @@ class RewardsCfg:
+     )
+ 
+     # action penalty
+-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.0001)
++    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)  # -0.0001 → -0.005：强力抑制目标附近极限环振荡
+     joint_vel = RewTerm(
+         func=mdp.joint_vel_l2,
+         weight=-0.0001,
+         params={"asset_cfg": SceneEntityCfg("robot")},
+     )
++    # success bonus: tanh reward near target (std=0.05 → 5cm 内仍有强梯度，避免策略在 5~10cm 处失速)
++    success_bonus = RewTerm(
++        func=mdp.position_command_error_tanh,
++        weight=5.0,
++        params={"asset_cfg": SceneEntityCfg("robot", body_names=MISSING), "std": 0.05, "command_name": "ee_pose"},
++    )
+ 
+ 
+ @configclass
+@@ -169,6 +176,12 @@ class TerminationsCfg:
+     """Termination terms for the MDP."""
+ 
+     time_out = DoneTerm(func=mdp.time_out, time_out=True)
++    # early terminate when end-effector reaches within 3 cm of target
++    success = DoneTerm(
++        func=ee_reached_goal,
++        params={"command_name": "ee_pose", "threshold": 0.03,
++                "asset_cfg": SceneEntityCfg("robot", body_names=MISSING)},
++    )
+ 
+ 
+ @configclass
+@@ -176,11 +189,13 @@ class CurriculumCfg:
+     """Curriculum terms for the MDP."""
+ 
+     action_rate = CurrTerm(
+-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -0.005, "num_steps": 4500}
++        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -0.01, "num_steps": 2000}
++        # -0.005 → -0.01：初始已强化，curriculum 继续加压；num_steps 2000 < max_iterations 确保生效
+     )
+ 
+     joint_vel = CurrTerm(
+-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 4500}
++        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -0.005, "num_steps": 2000}
++        # -0.0001 → -0.005：随训练进行逐步惩罚关节速度，稳定收敛后的停留姿态
+     )
+ 
+ 

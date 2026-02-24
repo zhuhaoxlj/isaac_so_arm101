@@ -1,0 +1,70 @@
+--- git status ---
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1000.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1050.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1100.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1150.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1200.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1250.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1300.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1350.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1400.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1450.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1500.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1550.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1600.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1650.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1700.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1750.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1800.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1850.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1900.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_300.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_350.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_400.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_450.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_500.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_550.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_600.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_650.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_700.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_750.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_800.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_850.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_900.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_950.pt
+	logs/rsl_rl/reach/2026-02-22_02-07-37/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0 b/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0
+index cdc64ef..ef0098d 100644
+Binary files a/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0 and b/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0 differ
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 7f86694..3d63bec 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -35,7 +35,9 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+         clip_param=0.2,
+-        entropy_coef=0.02,              # 0.005 → 0.02：配合低 init_noise_std 保持探索能力
++        entropy_coef=0.005,             # 0.02 → 0.005：entropy_coef=0.02 驱动 noise_std 无限增长；
++                                        # action_rate_l2 ∝ noise²，形成二次爆炸（-0.1028 @ iter1800）
++                                        # schedule=fixed 已防止 LR collapse，低 entropy_coef 安全
+         num_learning_epochs=5,          # 8 → 5：减少每轮过拟合
+         num_mini_batches=4,
+         learning_rate=1.0e-4,           # 3e-4 → 1e-4：fixed schedule 下使用更保守学习率

@@ -1,0 +1,191 @@
+--- git status ---
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   logs/rsl_rl/reach/2026-02-22_09-53-34/events.out.tfevents.1771754060.markgosling-p8zf00g3n2kj-main.193958.0
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_260.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_270.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_280.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_290.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_300.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_310.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_320.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_330.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_340.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_350.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_360.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_370.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_380.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_390.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_400.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_410.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_420.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_430.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_440.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_450.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_460.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_470.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_480.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_490.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_500.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_510.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_520.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_530.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_540.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_550.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_560.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_570.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_580.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_590.pt
+	new file:   logs/rsl_rl/reach/2026-02-22_09-53-34/model_599.pt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs/rsl_rl/reach/2026-02-22_10-12-13/
+ 
+
+
+--- git diff ---
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/events.out.tfevents.1771754060.markgosling-p8zf00g3n2kj-main.193958.0 b/logs/rsl_rl/reach/2026-02-22_09-53-34/events.out.tfevents.1771754060.markgosling-p8zf00g3n2kj-main.193958.0
+index 7bb0238..a54a7b3 100644
+Binary files a/logs/rsl_rl/reach/2026-02-22_09-53-34/events.out.tfevents.1771754060.markgosling-p8zf00g3n2kj-main.193958.0 and b/logs/rsl_rl/reach/2026-02-22_09-53-34/events.out.tfevents.1771754060.markgosling-p8zf00g3n2kj-main.193958.0 differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_260.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_260.pt
+new file mode 100644
+index 0000000..5a55cdf
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_260.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_270.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_270.pt
+new file mode 100644
+index 0000000..594b1cf
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_270.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_280.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_280.pt
+new file mode 100644
+index 0000000..189aedc
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_280.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_290.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_290.pt
+new file mode 100644
+index 0000000..83892ff
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_290.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_300.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_300.pt
+new file mode 100644
+index 0000000..ab4ddfc
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_300.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_310.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_310.pt
+new file mode 100644
+index 0000000..0b6d0c1
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_310.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_320.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_320.pt
+new file mode 100644
+index 0000000..82b7104
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_320.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_330.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_330.pt
+new file mode 100644
+index 0000000..4325c14
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_330.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_340.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_340.pt
+new file mode 100644
+index 0000000..cc56b49
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_340.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_350.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_350.pt
+new file mode 100644
+index 0000000..b1c9978
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_350.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_360.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_360.pt
+new file mode 100644
+index 0000000..5ec3877
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_360.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_370.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_370.pt
+new file mode 100644
+index 0000000..742a692
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_370.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_380.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_380.pt
+new file mode 100644
+index 0000000..518e5a9
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_380.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_390.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_390.pt
+new file mode 100644
+index 0000000..b54df43
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_390.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_400.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_400.pt
+new file mode 100644
+index 0000000..85aa7f5
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_400.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_410.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_410.pt
+new file mode 100644
+index 0000000..7a2a4c4
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_410.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_420.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_420.pt
+new file mode 100644
+index 0000000..987e33d
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_420.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_430.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_430.pt
+new file mode 100644
+index 0000000..6be1ea7
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_430.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_440.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_440.pt
+new file mode 100644
+index 0000000..cb30267
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_440.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_450.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_450.pt
+new file mode 100644
+index 0000000..442ddf3
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_450.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_460.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_460.pt
+new file mode 100644
+index 0000000..58eec18
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_460.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_470.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_470.pt
+new file mode 100644
+index 0000000..cd68498
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_470.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_480.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_480.pt
+new file mode 100644
+index 0000000..aaddac2
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_480.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_490.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_490.pt
+new file mode 100644
+index 0000000..b5713a2
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_490.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_500.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_500.pt
+new file mode 100644
+index 0000000..2c7f9eb
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_500.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_510.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_510.pt
+new file mode 100644
+index 0000000..0ded811
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_510.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_520.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_520.pt
+new file mode 100644
+index 0000000..8cf4cfe
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_520.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_530.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_530.pt
+new file mode 100644
+index 0000000..e5b6a7c
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_530.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_540.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_540.pt
+new file mode 100644
+index 0000000..6002eac
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_540.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_550.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_550.pt
+new file mode 100644
+index 0000000..ef941dc
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_550.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_560.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_560.pt
+new file mode 100644
+index 0000000..7b7182f
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_560.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_570.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_570.pt
+new file mode 100644
+index 0000000..cc36225
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_570.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_580.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_580.pt
+new file mode 100644
+index 0000000..26a48c6
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_580.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_590.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_590.pt
+new file mode 100644
+index 0000000..6e9efa7
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_590.pt differ
+diff --git a/logs/rsl_rl/reach/2026-02-22_09-53-34/model_599.pt b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_599.pt
+new file mode 100644
+index 0000000..b9edac1
+Binary files /dev/null and b/logs/rsl_rl/reach/2026-02-22_09-53-34/model_599.pt differ

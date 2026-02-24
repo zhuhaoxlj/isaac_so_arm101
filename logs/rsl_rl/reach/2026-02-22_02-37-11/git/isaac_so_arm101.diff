@@ -1,0 +1,85 @@
+--- git status ---
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1000.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1050.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1100.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1150.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1200.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1250.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1300.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1350.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1400.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1450.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1500.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1550.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1600.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1650.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1700.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1750.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1800.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1850.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_1900.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_300.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_350.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_400.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_450.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_500.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_550.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_600.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_650.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_700.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_750.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_800.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_850.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_900.pt
+	logs/rsl_rl/reach/2026-02-22_01-44-15/model_950.pt
+	logs/rsl_rl/reach/2026-02-22_02-07-37/
+	logs/rsl_rl/reach/2026-02-22_02-25-40/
+	logs/rsl_rl/reach/2026-02-22_02-37-11/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0 b/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0
+index cdc64ef..ef0098d 100644
+Binary files a/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0 and b/logs/rsl_rl/reach/2026-02-22_01-44-15/events.out.tfevents.1771695864.gpufree-container.175484.0 differ
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 7f86694..8481a5c 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -26,7 +26,10 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=0.2,             # 1.0 → 0.2：降低动作噪声，消除目标附近超调和极限环
++        init_noise_std=1.0,             # 0.2 → 1.0（恢复原始值）：
++                                        # 0.2 导致 entropy collapse（iter100 noise=0.144→iter1474 noise=0.065）
++                                        # noise 的自然衰减（1.0→0.1 over 700 iters）本身是探索→开发课程
++                                        # 振荡问题由 action_rate=-0.005（50×）+ success_bonus std=0.05 解决
+         actor_hidden_dims=[256, 128],   # [64,64] → [256,128]：扩大网络容量
+         critic_hidden_dims=[256, 128],
+         activation="elu",
+@@ -35,7 +38,10 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+         value_loss_coef=1.0,
+         use_clipped_value_loss=True,
+         clip_param=0.2,
+-        entropy_coef=0.02,              # 0.005 → 0.02：配合低 init_noise_std 保持探索能力
++        entropy_coef=0.01,              # 均衡分析：σ_eq = entropy_coef / (4×|action_rate|)
++                                        # 0.005 → σ_eq=0.25（太低，success 93%→27% 持续下滑）
++                                        # 0.02  → σ_eq=1.00（太高，noise 爆炸至 1.289）
++                                        # 0.01  → σ_eq=0.50（峰值成功率 93.4% 时的 noise 水平）
+         num_learning_epochs=5,          # 8 → 5：减少每轮过拟合
+         num_mini_batches=4,
+         learning_rate=1.0e-4,           # 3e-4 → 1e-4：fixed schedule 下使用更保守学习率
