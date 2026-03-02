@@ -1,0 +1,466 @@
+
+╭─── Claude Code v2.1.50 ──────────────────────────────────────────────────────╮
+│                                    │ Tips for getting started                │
+│            Welcome back!           │ Run /init to create a CLAUDE.md file w… │
+│                                    │ ─────────────────────────────────────── │
+│               ▐▛███▜▌              │ Recent activity                         │
+│              ▝▜█████▛▘             │ No recent activity                      │
+│                ▘▘ ▝▝               │                                         │
+│                                    │                                         │
+│   Sonnet 4.6 · API Usage Billing   │                                         │
+│   ~/gpufree-data/isaac_so_arm101   │                                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+  /model to try Opus 4.6
+
+✻ Conversation compacted (ctrl+o for history)
+
+  ⎿  Read src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py (47 lines)
+  ⎿  Read src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py (112 lines)
+  ⎿  Read src/isaac_so_arm101/tasks/reach/reach_env_cfg.py (230 lines)
+  ⎿  Read src/isaac_so_arm101/tasks/reach/mdp/terminations.py (86 lines)
+  ⎿  Read .git/COMMIT_EDITMSG (5 lines)
+  ⎿  Skills restored (zcf:git-commit)
+
+● Searched for 1 pattern, read 2 files (ctrl+o to expand)
+
+● 现在我对代码结构有了完整了解。先解释振荡的根本原因，然后创建轨迹导出脚本。
+
+  ---
+  末端振荡的根本原因分析
+
+  基于训练数据和代码结构，振荡有以下 3 个层叠原因：
+
+  原因: ① init_noise_std=1.0 太大
+  细节: iter 164 策略的探索噪声标准差仍为 1.0，动作空间 ±0.5
+    rad/step，末端在目标附近被噪声持续扰动
+  ────────────────────────────────────────
+  原因: ② success_bonus tanh 梯度陡峭
+  细节: std=0.02（2cm），在 3~5cm 范围 tanh
+    梯度最大，策略学到"反复穿过目标点"能最大化奖励
+  ────────────────────────────────────────
+  原因: ③ 无位置保持惩罚
+  细节: action_rate_l2 权重只有 -0.0001，无法抑制关节在到达后继续抖动
+
+  ---
+  现在创建轨迹记录脚本：
+
+● Write(src/isaac_so_arm101/scripts/rsl_rl/play_traj.py)
+  ⎿  Wrote 353 lines to src/isaac_so_arm101/scripts/rsl_rl/play_traj.py
+     # Copyright (c) 2024-2025, Muammer Bay (LycheeAI), Louis Le Lay
+     # All rights reserved.
+     #
+     # SPDX-License-Identifier: BSD-3-Clause
+
+     """Play a checkpoint and log end-effector + target trajectory for 
+     analysis.
+
+     Usage:
+         uv run play_traj --task Isaac-SO-ARM100-Reach-Play-v0 \\
+             --checkpoint 
+     logs/rsl_rl/reach/2026-02-22_00-53-16/model_150.pt \\
+     … +343 lines (ctrl+o to expand)
+
+● 现在在 pyproject.toml 里注册 play_traj 入口点：
+
+● Update(pyproject.toml)
+  ⎿  Added 1 line
+      16  [project.scripts]                                              
+      17  train = "isaac_so_arm101.scripts.rsl_rl.train:main"            
+      18  play = "isaac_so_arm101.scripts.rsl_rl.play:main"              
+      19 +play_traj = "isaac_so_arm101.scripts.rsl_rl.play_traj:main"    
+      20  list_envs = "isaac_so_arm101.scripts.list_envs:main"           
+      21  zero_agent = "isaac_so_arm101.scripts.zero_agent:main"         
+      22  random_agent = "isaac_so_arm101.scripts.random_agent:main"     
+
+● 然后重装包使入口点生效：
+
+● Bash(uv pip install -e . --quiet 2>&1 | tail -5)
+  ⎿  (No output)
+
+● Bash(uv run play_traj --help 2>&1 | head -30)
+  ⎿  Uninstalled 1 package in 0.47ms
+     warning: Failed to hardlink files; falling back to full copy. This may
+      lead to degraded performance.
+     … +21 lines (ctrl+o to expand)
+
+● 入口点注册成功。现在验证脚本语法没有问题：
+
+● Read 1 file (ctrl+o to expand)
+
+● ---
+  总结
+
+  末端振荡的 3 个根本原因
+
+  训练 iter 164 时的状态:
+    init_noise_std = 1.0  ← 动作噪声未衰减，每步 ±1.0 rad 随机扰动
+    success_bonus std = 0.02  ← tanh 在 2~5cm 梯度最陡，策略学会"反复穿越目标"
+    action_rate_l2 = -0.0001  ← 抖动惩罚极弱，无法抑制关节频繁换向
+
+  物理上：策略发现反复靠近并穿过目标点比停在目标点得分更高（每次穿越都触发 tanh
+  峰值梯度），导致目标附近的高频振荡。
+
+  ---
+  轨迹导出使用方式
+
+  # 记录 600 步 (约 5 个 episode)，EE 体为 link_6
+  uv run play_traj \
+      --task Isaac-SO-ARM100-Reach-Play-v0 \
+      --checkpoint logs/rsl_rl/reach/2026-02-22_00-53-16/model_150.pt \
+      --num_steps 600 \
+      --ee_body link_6 \
+      --num_envs 1 \
+      --headless    # 可去掉 --headless 以显示 GUI
+
+  # 输出文件
+  trajectory_logs/
+    traj_model_150_20260222_XXXXXX.csv   ← 原始数据
+    traj_model_150_20260222_XXXXXX.png   ← 4 格分析图
+
+  生成图包含：① 3D 轨迹、② 每 episode 距离曲线、③ XYZ 分量 vs 目标、④
+  距离分布直方图（含振荡频率信息）。
+
+  ---
+  后续建议的训练修复（解决振荡）
+
+  # rsl_rl_ppo_cfg.py
+  policy = RslRlPpoActorCriticCfg(
+      init_noise_std=0.3,  # 1.0 → 0.3：大幅降低动作噪声
+  )
+  algorithm = RslRlPpoAlgorithmCfg(
+      entropy_coef=0.01,    # 增大，但配合更小 init_noise_std
+      schedule="fixed",     # 不再让 adaptive KL 把 LR 杀死
+  )
+
+  # reach_env_cfg.py
+  success_bonus = RewTerm(
+      weight=5.0,
+      params={"std": 0.05},  # 0.02 → 0.05：梯度更平缓，减少振荡激励
+  )
+  action_rate = RewTerm(weight=-0.005)  # 0.0001 → 0.005：更强抖动惩罚
+
+✻ Churned for 7m 30s
+
+❯ @trajectory_logs/traj_model_150_20260222_013558.csv                       
+  @trajectory_logs/traj_model_150_20260222_013558.png                       
+  这是刚刚的运行结果，帮我分析                                              
+  ⎿  Read trajectory_logs/traj_model_150_20260222_013558.csv (602 lines)
+
+● Read 1 file (ctrl+o to expand)
+
+● 轨迹数据深度分析
+
+  关键发现速览
+
+  ┌──────────────────┬──────────────────────────────────┐
+  │       指标       │               数值               │
+  ├──────────────────┼──────────────────────────────────┤
+  │ 记录总步数       │ 600 steps (7 个 episode)         │
+  ├──────────────────┼──────────────────────────────────┤
+  │ 真实成功 episode │ ep0, ep1, ep3, ep5 (4/6 ≈ 67%)   │
+  ├──────────────────┼──────────────────────────────────┤
+  │ 成功用时         │ 17~28 steps ≈ 0.57~0.93 秒       │
+  ├──────────────────┼──────────────────────────────────┤
+  │ 失败 episode     │ ep2, ep4, ep6 (卡死在 5.5~9.5cm) │
+  ├──────────────────┼──────────────────────────────────┤
+  │ 直方图显示 0%    │ 是数据采集 bug，非真实（见下）   │
+  └──────────────────┴──────────────────────────────────┘
+
+  ---
+  1. 数据采集 Bug 说明（直方图 0.0% 的原因）
+
+  图中 "success rate 0.0%" 是误报，因为我写的轨迹记录器有个时序 bug：
+
+  env.step(actions) 返回 obs ← 如果 done=True，这已经是 reset 后的新 episode
+  状态
+  robot.data.body_pos_w ← 读到的是 reset 后初始位置（EE 在空中很远处）
+                                                                ↑
+  不是成功瞬间的位置！
+
+  所以每次成功终止后，记录的那一步 EE 坐标跳回起始位置，距离变成
+  0.7m，掩盖了真正的 < 3cm 成功时刻。
+
+  ---
+  2. 两类 Episode 行为的对比分析
+
+  ✅ 成功型（ep0、ep1、ep3、ep5）—— 弹道式快速抵达
+
+  ep0: distance 0.778 → 0.031 → 成功 (25步, 0.83s)
+  ep1: distance 0.758 → 0.030 → 成功 (23步, 0.77s)
+  ep3: distance 0.607 → 0.032 → 成功 (28步, 0.93s)
+  ep5: distance 0.532 → 0.040 → 成功 (17步, 0.57s)
+
+  从 Episode 0 的 XYZ 曲线（左下图）可以看到：运动曲线完全平滑，无任何振荡，是单
+  调收敛的弹道轨迹。这类 episode 说明策略本身能力没问题。
+
+  ---
+  ❌ 卡死型（ep2、ep4、ep6）—— 在阈值附近进入极限环
+
+  ep2: 在 step 32 后卡在 distance ≈ 0.0954m，持续 ~117 steps（3.9秒）
+  ep4: 在 step 16 后卡在 distance ≈ 0.087m，持续 ~133 steps（4.4秒）
+  ep6: 在 step 28 后卡在 distance ≈ 0.0558m，持续 ~121 steps（4.0秒）
+
+  从 ep4 的距离曲线（右上图）可以清楚看到：距离在 0.06~0.09m 
+  之间做有规律的振荡，周期约 10~15 步。EE 在目标周围绕圈而不是收敛。
+
+  ---
+  3. 振荡的物理机制（图示）
+
+    ┌─ 每5秒 command 重采样 ─────────────────────────────────────────┐
+    │                                                                  │
+  step_in_ep:  0     16      149(重采样)     157
+  ep4 dist:  0.539 → 0.063 → [卡在0.087] → target跳变 → 快速成功
+
+  ep4 EE在步骤16-25轨迹（从CSV提取）:
+    step16: dist=0.079 ↓
+    step17: dist=0.063 ↓ ← 最近距离
+    step18: dist=0.064 ↑
+    step19: dist=0.069 ↑
+    step20: dist=0.076 ↑   ← 周期振荡, 幅度 ~15mm
+    step21: dist=0.083 ↑
+    step22: dist=0.089 ↑
+    step23: dist=0.093 →
+    step24: dist=0.092 ↓   ← 在这个环里无法跳出
+    ...（循环）
+
+  ---
+  4. 根本原因定位
+
+  原因 A：init_noise_std=1.0 造成不可控超调
+
+  在 distance ≈ 8~10cm 范围内，每步理论修正量约为 scale × noise_std = 0.5 × 1.0 
+  = 0.5 rad，对应末端位移远超 8cm。策略无法精细控制，只能反复超调。
+
+  原因 B：success_bonus 梯度在 5~10cm 处接近零
+
+  tanh(0.03/0.02) = tanh(1.5) = 0.905   ← 3cm 时奖励梯度
+  tanh(0.06/0.02) = tanh(3.0) = 0.995   ← 6cm 时奖励梯度几乎一样！
+
+  策略在 6cm 处与 3cm 处得到的梯度几乎相同 → 无动力继续靠近。
+
+  原因 C：action_rate_l2 = -0.0001 太弱
+
+  微弱的抖动惩罚无法阻止策略在目标附近持续输出高幅动作，极限环得以维持。
+
+  原因 D：5秒 command 重采样触发"逃脱"
+
+  从 ep4 数据可见：command 在 step 149 重采样后，EE 相对新目标距离变为
+  0.224m，策略重新激活大动作模式，几步内就成功了（3.8cm）。这说明
+  策略有能力快速到达，只是被困在了极限环里无法自主逃脱。
+
+  ---
+  5. 修复方案（优先级排序）
+
+  # rsl_rl_ppo_cfg.py  ← 优先级 ★★★
+  policy = RslRlPpoActorCriticCfg(
+      init_noise_std=0.2,    # 1.0 → 0.2：降低动作噪声幅度
+  )
+  algorithm = RslRlPpoAlgorithmCfg(
+      schedule="fixed",       # adaptive → fixed：防止 LR 衰减到 0
+      learning_rate=1.0e-4,   # 稳定学习
+      entropy_coef=0.02,      # 0.005 → 0.02：保持策略探索能力
+  )
+
+  # reach_env_cfg.py  ← 优先级 ★★★
+  success_bonus = RewTerm(
+      weight=5.0,
+      params={"std": 0.05},   # 0.02 → 0.05：5cm 处仍有强梯度
+  )
+  action_rate = RewTerm(weight=-0.005)   # 0.0001 → 0.005：强力抑制极限环
+
+  修复后预期效果：
+  - init_noise_std=0.2 消除超调
+  - std=0.05 使 6cm 处梯度比 3cm 处小 30%（而非现在的 0.5%）
+  - action_rate=-0.005 使极限环代价高昂，策略主动收敛
+
+  ---
+  总结
+
+  model_150.pt 的真实水平：约 67% 的 episode 快速成功（< 1秒），33% 的 episode 
+  因奖励梯度消失被困在目标外 5~10cm 的极限环。你看到的"振荡"是 EE 
+  绕目标的小圆圈运动，不是随机抖动，而是策略找到了一个局部稳定状态却无法跳出。根
+  本修复需要重新训练，调整 success_bonus std 和降低 init_noise_std。
+
+
+✻ Cooked for 3m 9s
+
+❯ 帮我修改代码修复这个问题 
+
+● 根据轨迹分析，需要修改两个文件。让我先确认当前代码状态：
+
+● Read 2 files (ctrl+o to expand)
+
+● 清楚了所有问题所在。执行 4 处精确修改：
+
+  修改清单：
+  1. rsl_rl_ppo_cfg.py：init_noise_std 1.0→0.2，schedule
+  adaptive→fixed，learning_rate 3e-4→1e-4，entropy_coef 0.005→0.02
+  2. reach_env_cfg.py：action_rate weight -0.0001→-0.005，success_bonus std
+  0.02→0.05，curriculum 目标值同步上调
+
+● Update(src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py)
+  ⎿  Added 4 lines, removed 4 lines
+      26      resume = False                                             
+      27      empirical_normalization = False                            
+      28      policy = RslRlPpoActorCriticCfg(                           
+      29 -        init_noise_std=1.0,                                    
+      29 +        init_noise_std=0.2,             # 1.0 →                
+         +0.2：降低动作噪声，消除目标附近超调和极限环                    
+      30          actor_hidden_dims=[256, 128],   # [64,64] →            
+          [256,128]：扩大网络容量                                        
+      31          critic_hidden_dims=[256, 128],                         
+      32          activation="elu",                                      
+     ...
+      35          value_loss_coef=1.0,                                   
+      36          use_clipped_value_loss=True,                           
+      37          clip_param=0.2,                                        
+      38 -        entropy_coef=0.005,             # 0.001 → 0.005：防止  
+         -entropy collapse，保持探索                                     
+      38 +        entropy_coef=0.02,              # 0.005 → 0.02：配合低 
+         + init_noise_std 保持探索能力                                   
+      39          num_learning_epochs=5,          # 8 →                  
+          5：减少每轮过拟合                                              
+      40          num_mini_batches=4,                                    
+      41 -        learning_rate=3.0e-4,           # 1e-3 → 3e-4：更稳定的
+         -学习率                                                         
+      42 -        schedule="adaptive",                                   
+      41 +        learning_rate=1.0e-4,           # 3e-4 → 1e-4：        
+         +fixed schedule 下使用更保守学习率                              
+      42 +        schedule="fixed",               # adaptive →           
+         +fixed：防止 KL 驱动 LR 衰减至 0（entropy collapse）            
+      43          gamma=0.99,                                            
+      44          lam=0.95,                                              
+      45          desired_kl=0.01,                                       
+
+● Update(src/isaac_so_arm101/tasks/reach/reach_env_cfg.py)
+  ⎿  Added 1 line, removed 1 line
+      157      )                                                         
+      158                                                                
+      159      # action penalty                                          
+      160 -    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0. 
+          -0001)                                                         
+      160 +    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0. 
+          +005)  # -0.0001 → -0.005：强力抑制目标附近极限环振荡          
+      161      joint_vel = RewTerm(                                      
+      162          func=mdp.joint_vel_l2,                                
+      163          weight=-0.0001,                                       
+
+● Update(src/isaac_so_arm101/tasks/reach/reach_env_cfg.py)
+  ⎿  Added 2 lines, removed 2 lines
+      163          weight=-0.0001,                                       
+      164          params={"asset_cfg": SceneEntityCfg("robot")},        
+      165      )                                                         
+      166 -    # success bonus: high weight                              
+          -tanh reward near target (std=0.02 → 2cm precision incentive)  
+      166 +    # success bonus: tanh reward near target (std=0.05 → 5cm  
+          +内仍有强梯度，避免策略在 5~10cm 处失速)                       
+      167      success_bonus = RewTerm(                                  
+      168          func=mdp.position_command_error_tanh,                 
+      169          weight=5.0,                                           
+      170 -        params={"asset_cfg": SceneEntityCfg("robot",          
+          -body_names=MISSING), "std": 0.02, "command_name": "ee_pose"}, 
+      170 +        params={"asset_cfg": SceneEntityCfg("robot",          
+          +body_names=MISSING), "std": 0.05, "command_name": "ee_pose"}, 
+      171      )                                                         
+      172                                                                
+      173                                                                
+
+● Update(src/isaac_so_arm101/tasks/reach/reach_env_cfg.py)
+  ⎿  Added 4 lines, removed 2 lines
+      189      """Curriculum terms for the MDP."""                       
+      190                                                                
+      191      action_rate = CurrTerm(                                   
+      192 -        func=mdp.modify_reward_weight, params={"term_name":   
+          -"action_rate", "weight": -0.005, "num_steps": 4500}           
+      192 +        func=mdp.modify_reward_weight, params={"term_name":   
+          +"action_rate", "weight": -0.01, "num_steps": 2000}            
+      193 +        # -0.005 → -0.01：初始已强化，curriculum              
+          +继续加压；num_steps 2000 < max_iterations 确保生效            
+      194      )                                                         
+      195                                                                
+      196      joint_vel = CurrTerm(                                     
+      197 -        func=mdp.modify_reward_weight, params={"term_name":   
+          -"joint_vel", "weight": -0.001, "num_steps": 4500}             
+      197 +        func=mdp.modify_reward_weight, params={"term_name":   
+          +"joint_vel", "weight": -0.005, "num_steps": 2000}             
+      198 +        # -0.0001 →                                           
+          +-0.005：随训练进行逐步惩罚关节速度，稳定收敛后的停留姿态      
+      199      )                                                         
+      200                                                                
+      201                                                                
+
+● 验证修改结果：
+
+● Read 2 files (ctrl+o to expand)
+
+● 所有修改正确。现在验证 Python 语法无误：
+
+● Read 1 file (ctrl+o to expand)
+
+● 语法正确。所有修改完成，这是完整的变更对照表：
+
+  ---
+  修改汇总
+
+  rsl_rl_ppo_cfg.py — PPO 超参数
+
+  参数: init_noise_std
+  旧值: 1.0
+  新值: 0.2
+  修复的问题: 动作噪声过大 → 超调 → 极限环
+  ────────────────────────────────────────
+  参数: schedule
+  旧值: "adaptive"
+  新值: "fixed"
+  修复的问题: adaptive KL 把 LR 杀死 → 训练冻结
+  ────────────────────────────────────────
+  参数: learning_rate
+  旧值: 3.0e-4
+  新值: 1.0e-4
+  修复的问题: fixed schedule 下配套保守学习率
+  ────────────────────────────────────────
+  参数: entropy_coef
+  旧值: 0.005
+  新值: 0.02
+  修复的问题: 低噪声下需更强 entropy 保持探索
+
+  reach_env_cfg.py — 奖励与课程
+
+  参数: action_rate weight
+  旧值: -0.0001
+  新值: -0.005
+  修复的问题: 惩罚太弱，极限环无代价维持
+  ────────────────────────────────────────
+  参数: success_bonus std
+  旧值: 0.02
+  新值: 0.05
+  修复的问题: tanh 在 5~10cm 处梯度≈0，策略失速
+  ────────────────────────────────────────
+  参数: curriculum action_rate target
+  旧值: -0.005
+  新值: -0.01
+  修复的问题: 与新初始值一致，继续加压
+  ────────────────────────────────────────
+  参数: curriculum num_steps
+  旧值: 4500
+  新值: 2000
+  修复的问题: 原值超过 max_iterations=3000，课程从未生效
+
+  ---
+  修复效果的理论依据
+
+  旧 success_bonus 梯度：
+    tanh(3cm/2cm) = 0.905   tanh(6cm/2cm) = 0.995  → 差值 0.090 ← 几乎无梯度
+
+  新 success_bonus 梯度：
+    tanh(3cm/5cm) = 0.537   tanh(6cm/5cm) = 0.833  → 差值 0.296 ← 3.3倍更强
+
+  策略在 6cm 处现在能感受到明显的"继续靠近"激励，配合 action_rate=-0.005
+  使极限环变得昂贵，策略会选择收敛而非振荡。
+
+  现在可以启动新训练：
+
+  uv run train --task Isaac-SO-ARM100-Reach-v0 --headless
+
+✻ Worked for 2m 13s
