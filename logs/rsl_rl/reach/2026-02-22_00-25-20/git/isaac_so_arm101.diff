@@ -1,0 +1,1661 @@
+--- git status ---
+On branch main
+Your branch is ahead of 'origin/main' by 6 commits.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   1.png
+	new file:   2026-02-22-000308-command-messagezcfgit-commitcommand-message.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   logs/rsl_rl/reach/2026-02-22_00-02-57/exported/policy.pt
+	modified:   src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	2026-02-22-002446-command-messagezcfgit-commitcommand-message.txt
+	logs/rsl_rl/reach/2026-02-22_00-25-20/
+ 
+
+
+--- git diff ---
+diff --git a/1.png b/1.png
+new file mode 100644
+index 0000000..b22395c
+Binary files /dev/null and b/1.png differ
+diff --git a/2026-02-22-000308-command-messagezcfgit-commitcommand-message.txt b/2026-02-22-000308-command-messagezcfgit-commitcommand-message.txt
+new file mode 100644
+index 0000000..f785191
+--- /dev/null
++++ b/2026-02-22-000308-command-messagezcfgit-commitcommand-message.txt
+@@ -0,0 +1,1608 @@
++
++╭─── Claude Code v2.1.50 ──────────────────────────────────────────────────────╮
++│                                    │ Tips for getting started                │
++│            Welcome back!           │ Run /init to create a CLAUDE.md file w… │
++│                                    │ ─────────────────────────────────────── │
++│               ▐▛███▜▌              │ Recent activity                         │
++│              ▝▜█████▛▘             │ No recent activity                      │
++│                ▘▘ ▝▝               │                                         │
++│                                    │                                         │
++│   Sonnet 4.6 · API Usage Billing   │                                         │
++│   ~/gpufree-data/isaac_so_arm101   │                                         │
++╰──────────────────────────────────────────────────────────────────────────────╯
++
++  /model to try Opus 4.6
++
++❯ /zcf:git-commit 
++
++● Bash(git status --porcelain)
++  ⎿  ?? assets/
++
++● Bash(git log -n 10 --pretty="%s")
++  ⎿  chore(logs): track all training artifacts including model checkpoints
++     chore: selectively track training artifacts in logs/
++     fix(deps): resolve flatdict build failure due to missing pkg_resources
++     … +8 lines (ctrl+o to expand)
++
++● Searched for 1 pattern, read 1 file (ctrl+o to expand)
++
++● 改动分析：
++
++  - 暂存区：空
++  - 未追踪目录：assets/rm_eco65/（含 URDF 配置文件、CSV 参数文件及 7 个 STL
++  网格文件）
++
++  这是一组完整的 RM ECO65 机械臂资产文件，属于单一关注点，无需拆分。
++
++  建议提交信息如下：
++
++  feat(assets): add RM ECO65 robot arm URDF and mesh assets
++
++  - add ECO65-B.urdf with full robot arm kinematics description
++  - add ECO65-B.csv with joint/link parameter definitions
++  - add STL mesh files for base_link and 6 arm links
++
++  ---
++  执行前确认
++
++  ⚠️ 即将执行：
++
++  1. git add assets/
++  2. git commit -F .git/COMMIT_EDITMSG
++
++  是否继续？（请回复"确认"或"是"）
++
++✻ Cooked for 41s
++
++❯ 继续 
++
++● Read 1 file (ctrl+o to expand)
++
++● Bash(git add assets/ && git commit -F .git/COMMIT_EDITMSG)
++  ⎿  [main f714c37] feat(assets): add RM ECO65 robot arm URDF and mesh asse
++     ts
++      9 files changed, 404 insertions(+)
++     … +9 lines (ctrl+o to expand)
++
++● 提交成功 ✅
++
++  [main f714c37] feat(assets): add RM ECO65 robot arm URDF and mesh assets
++   9 files changed, 404 insertions(+)
++
++  共提交 9 个文件，包含 RM ECO65 机械臂的 URDF 配置、CSV 参数及 7 个 STL
++  网格文件。
++
++❯ /zcf:git-commit 
++
++● Bash(git status --porcelain && git diff --stat)
++  ⎿   M logs/rsl_rl/reach/2026-02-21_22-05-24/exported/policy.pt
++      .../reach/2026-02-21_22-05-24/exported/policy.pt    | Bin 34930 -> 34
++     930 bytes
++      1 file changed, 0 insertions(+), 0 deletions(-)
++
++● 改动分析：
++
++  - 暂存区：空（需先 git add）
++  - 未暂存改动：1 个二进制文件被修改
++
++  M logs/rsl_rl/reach/2026-02-21_22-05-24/exported/policy.pt
++
++  这是 reach 任务的 RL 策略导出模型文件（PyTorch .pt）被更新，属于单一关注点。
++
++  建议提交信息如下：
++
++  chore(logs): update exported policy checkpoint for reach task
++
++  ---
++  执行前确认
++
++  ⚠️ 即将执行：
++
++  1. git add "logs/rsl_rl/reach/2026-02-21_22-05-24/exported/policy.pt"
++  2. git commit -F .git/COMMIT_EDITMSG
++
++  是否继续？（请回复"确认"或"是"）
++
++❯ 是 
++
++● Bash(cat > .git/COMMIT_EDITMSG << 'EOF'
++      chore(logs): update exported policy checkpoint for reach task…)
++  ⎿  [main 382a814] chore(logs): update exported policy checkpoint for reac
++     h task
++      1 file changed, 0 insertions(+), 0 deletions(-)
++
++● 提交成功 ✅
++
++  [main 382a814] chore(logs): update exported policy checkpoint for reach task
++   1 file changed, 0 insertions(+), 0 deletions(-)
++
++  reach 任务的导出策略模型文件已提交。
++
++❯ @docs/LearnProgress.md 帮我结合老师给我制定的计划帮我分析，为啥我修改的   
++  SO_ARM100_CFG 机械臂找不到 rm_eco65？ @src/isaac_so_arm101/tasks/reach/   
++  ⎿  Read docs/LearnProgress.md (132 lines)
++  ⎿  Listed directory src/isaac_so_arm101/tasks/reach/
++
++● 让我先全面了解代码结构，再结合学习计划分析问题。
++
++● Searched for 2 patterns, read 4 files (ctrl+o to expand)
++
++● 好，证据齐全了。我来给你做完整的根因分析。
++
++  ---
++  诊断报告：RM_ECO65 找不到的根本原因
++
++  结合你的学习计划（阶段二：RM_ECO65 机器人建模），当前代码有 4 
++  个层叠错误，从下往上逐层阻断：
++
++  ---
++  🔴 Bug 1 — 缺少 __init__.py（包结构损坏）
++
++  trs_so100/ 和 trs_so101/ 都有 __init__.py，但 rm_eco65/ 没有：
++
++  robots/trs_so100/   → ✅ __init__.py, so_arm100.py
++  robots/trs_so101/   → ✅ __init__.py, so_arm101.py
++  robots/rm_eco65/    → ❌ 缺少 __init__.py，只有 rm_eco65.py
++
++  虽然 Python 3 有"命名空间包"机制侥幸让它能被引入，但不规范，可能在 Isaac Lab
++  的模块扫描中失效。
++
++  ---
++  🔴 Bug 2 — 旧版 API 命名空间（根本性错误）
++
++  rm_eco65.py 使用的是 Isaac Lab 1.x 旧版 API：
++
++  # rm_eco65.py（当前写法 - 错误）
++  import omni.isaac.lab.sim as sim_utils                    # ❌
++  from omni.isaac.lab.actuators import ImplicitActuatorCfg  # ❌
++  from omni.isaac.lab.assets import ArticulationCfg         # ❌
++
++  而项目所有其他文件都用的是 2.x 新版：
++
++  # so_arm100.py（正确写法）
++  import isaaclab.sim as sim_utils                              # ✅
++  from isaaclab.actuators import ImplicitActuatorCfg            # ✅
++  from isaaclab.assets.articulation import ArticulationCfg      # ✅
++
++  这会导致 import 直接报 ModuleNotFoundError，机器人配置根本加载不进来。
++
++  ---
++  🔴 Bug 3 — USD 文件路径错误
++
++  rm_eco65.py 里写的路径和实际生成的路径对不上：
++
++  # 当前写法（错误）
++  usd_path="/root/gpufree-data/isaac_so_arm101/assets/rm_eco65/ECO65-B.usd"  # 
++  ❌ 文件不存在
++
++  # 实际 USD 文件位置
++  # assets/rm_eco65/urdf/ECO65-B/ECO65-B.usd  ✅
++
++  URDF Importer 导出后，USD 不在根目录，而是在 urdf/ECO65-B/ 子目录下。
++
++  ---
++  🟡 Bug 4 — 环境配置关节名/Link名沿用了 SO_ARM100（逻辑错误）
++
++  joint_pos_env_cfg.py 中的 SoArm100ReachEnvCfg 虽然换了机器人，但关节名和末端
++  Link 名没有跟着改：
++
++  配置项: arm_action.joint_names
++  当前值（SO_ARM100 的）: ["shoulder_pan", "shoulder_lift", ...] ❌
++  ECO65 实际应该填: ["joint.*"] ✅
++  ────────────────────────────────────────
++  配置项: body_names（奖励末端）
++  当前值（SO_ARM100 的）: ["gripper"] ❌
++  ECO65 实际应该填: ["link_6"] ✅
++  ────────────────────────────────────────
++  配置项: ee_pose.body_name
++  当前值（SO_ARM100 的）: ["gripper"] ❌
++  ECO65 实际应该填: ["link_6"] ✅
++
++  URDF 里 ECO65 的 link 名为：base_link, link_1, link_2, link_3, link_4, link_5,
++   link_6，根本没有 gripper。
++
++  ---
++  修复优先级
++
++  Bug 2（API 命名空间）→ Bug 1（__init__.py）→ Bug 3（USD 路径）→ Bug
++  4（关节/Link名）
++
++  按学习计划，你现在正处于阶段二：实践任务 — 「创建 ArticulationCfg
++  配置机器人」。要继续推进到阶段三的训练，这 4 个 Bug 都需要修复。
++
++  要我帮你逐一修复吗？
++
++✻ Churned for 1m 32s
++
++❯ 帮我修复 
++
++● Read 1 file (ctrl+o to expand)
++
++● 空文件，了解了。四个 Bug 一起修复：
++
++● Bash(touch /root/gpufree-data/isaac_so_arm101/src/isaac_so_arm101/robots/rm_ec
++      o65/__init__.py)
++  ⎿  Done
++
++● Write(src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py)
++  ⎿  Added 12 lines, removed 9 lines
++       1 -import omni.isaac.lab.sim as sim_utils                         
++       2 -from omni.isaac.lab.actuators import ImplicitActuatorCfg       
++       3 -from omni.isaac.lab.assets import ArticulationCfg              
++       1 +from pathlib import Path                                       
++       2                                                                 
++       3 +import isaaclab.sim as sim_utils                               
++       4 +from isaaclab.actuators import ImplicitActuatorCfg             
++       5 +from isaaclab.assets.articulation import ArticulationCfg       
++       6 +                                                               
++       7 +TEMPLATE_ASSETS_DATA_DIR =                                     
++         +Path(__file__).resolve().parent.parent.parent.parent.parent /  
++         +"assets" / "rm_eco65"                                          
++       8 +                                                               
++       9  # 这是你 RM_ECO65 的专属配置                                   
++      10  RM_ECO65_CFG = ArticulationCfg(                                
++      11      spawn=sim_utils.UsdFileCfg(                                
++      12 -        # 绝对路径最稳妥，避免 Isaac Sim 找不到文件            
++      13 -        usd_path="/root/gpufree-data/isaac_so_arm101/assets/rm 
++         -_eco65/ECO65-B.usd",                                           
++      12 +        usd_path=f"{TEMPLATE_ASSETS_DATA_DIR}/urdf/ECO65-B/ECO 
++         +65-B.usd",                                                     
++      13          rigid_props=sim_utils.RigidBodyPropertiesCfg(          
++      14              disable_gravity=False,                             
++      15              max_depenetration_velocity=10.0,                   
++      16          ),                                                     
++      17                                                                 
++          articulation_props=sim_utils.ArticulationRootPropertiesCfg(    
++      18 -            enabled_self_collisions=False,                     
++         -# 训练初期建议关闭自碰撞，防止乱动卡死                         
++      18 +            enabled_self_collisions=False,                     
++         +# 训练初期建议关闭自碰撞，防止乱动卡死                         
++      19              solver_position_iteration_count=4,                 
++      20              solver_velocity_iteration_count=0,                 
++      21          ),                                                     
++      22      ),                                                         
++      23      init_state=ArticulationCfg.InitialStateCfg(                
++      24 -        pos=(0.0, 0.0, 0.0), # 机械臂出生位置                  
++      24 +        pos=(0.0, 0.0, 0.0),  # 机械臂出生位置                 
++      25          # 睿尔曼6轴机械臂的初始关节角度                        
++      26          joint_pos={                                            
++      27              "joint1": 0.0,                                     
++     ...
++      31      ),                                                         
++      32      actuators={                                                
++      33          "arm": ImplicitActuatorCfg(                            
++      34 -            joint_names_expr=["joint.*"],                      
++         -# 使用正则表达式匹配所有叫 joint 开头的关节                    
++      34 +            joint_names_expr=["joint.*"],                      
++         +# 使用正则表达式匹配所有叫 joint 开头的关节                    
++      35              stiffness=400.0,  # PD控制的 Kp (刚度)             
++      36              damping=40.0,     # PD控制的 Kd (阻尼)             
++      37              armature=0.01,                                     
++      38          ),                                                     
++      39      },                                                         
++      40 -)                                                              
++      40   No newline at end of file                                     
++      41 +)                                                              
++
++● 现在修复 Bug 4 —— joint_pos_env_cfg.py 中的关节名和末端 Link 名：
++
++● Update(src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py)
++  ⎿  Added 7 lines, removed 9 lines
++      35          # switch robot to franka                               
++      36          # self.scene.robot =                                   
++          SO_ARM100_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")        
++      37          self.scene.robot =                                     
++          RM_ECO65_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")         
++      38 -        # override rewards                                     
++      39 -        self.rewards.end_effector_position_tracking.params["ass
++         -et_cfg"].body_names = ["gripper"]                              
++      40 -        self.rewards.end_effector_position_tracking_fine_graine
++         -d.params["asset_cfg"].body_names = ["gripper"]                 
++      41 -        self.rewards.end_effector_orientation_tracking.params["
++         -asset_cfg"].body_names = ["gripper"]                           
++      38 +        # override rewards - ECO65 末端执行器为 link_6         
++      39 +        self.rewards.end_effector_position_tracking.params["ass
++         +et_cfg"].body_names = ["link_6"]                               
++      40 +        self.rewards.end_effector_position_tracking_fine_graine
++         +d.params["asset_cfg"].body_names = ["link_6"]                  
++      41 +        self.rewards.end_effector_orientation_tracking.params["
++         +asset_cfg"].body_names = ["link_6"]                            
++      42                                                                 
++      43 -        # TODO: reorient command target                        
++      44 -                                                               
++      45 -        # override actions                                     
++      43 +        # override actions - ECO65 6轴关节名为 joint1~joint6   
++      44          self.actions.arm_action = mdp.JointPositionActionCfg(  
++      45              asset_name="robot",                                
++      46 -            joint_names=["shoulder_pan", "shoulder_lift",      
++         -"elbow_flex", "wrist_flex", "wrist_roll"],                     
++      46 +            joint_names=["joint.*"],                           
++      47              scale=0.5,                                         
++      48              use_default_offset=True,                           
++      49          )                                                      
++      50          # override command generator body                      
++      51          # end-effector is along z-direction                    
++      52 -        self.commands.ee_pose.body_name = ["gripper"]          
++      52 +        self.commands.ee_pose.body_name = ["link_6"]           
++      53          # self.commands.ee_pose.ranges.pitch = (math.pi,       
++          math.pi)                                                       
++      54                                                                 
++      55                                                                 
++
++● 最后验证 USD 路径实际存在，并做快速语法检查：
++
++● Read 2 files (ctrl+o to expand)
++
++● 全部通过。修复汇总：
++
++  ---
++  修复结果
++
++  Bug: ① __init__.py 缺失
++  文件: robots/rm_eco65/__init__.py
++  修复内容: 新建空文件，补全包结构
++  ────────────────────────────────────────
++  Bug: ② 旧版 API 命名空间
++  文件: robots/rm_eco65/rm_eco65.py
++  修复内容: omni.isaac.lab.* → isaaclab.*
++  ────────────────────────────────────────
++  Bug: ③ USD 路径错误
++  文件: robots/rm_eco65/rm_eco65.py
++  修复内容: 路径改为 urdf/ECO65-B/ECO65-B.usd（动态计算，不再硬编码绝对路径）
++  ────────────────────────────────────────
++  Bug: ④ 关节名/Link名错误
++  文件: tasks/reach/joint_pos_env_cfg.py
++  修复内容: shoulder_pan/gripper → joint.*/link_6
++
++  现在可以用下面的命令测试加载是否成功：
++  uv run train --task Isaac-SO-ARM100-Reach-v0 --headless
++
++  如果 Isaac Sim 能正常启动并看到 ECO65 机械臂出现在场景中，说明修复完整生效。
++
++✻ Crunched for 1m 8s
++
++❯ (isaac-so-arm101) root@gpufree-container ~/g/isaac_so_arm101 (main)# uv   
++  run play --task Isaac-SO-                                                 
++  ARM100-Reach-Play-v0                                                      
++  [INFO][AppLauncher]: Using device: cuda:0                                 
++  [INFO][AppLauncher]: Loading experience file:                             
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  aclab/apps/isaaclab.python.kit                                            
++  Loading user config located at:                                           
++  '/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/is 
++  aacsim/kit/data/Kit/Isaac-Sim/5.1/user.config.json'                       
++  [Info] [carb] Logging to file:                                            
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/kit/logs/Kit/Isaac-Sim/5.1/kit_20260221_235851.log                  
++  [0.059s] [ext: omni.kit.async_engine-0.0.3] startup                       
++  [0.210s] [ext: omni.metrics.core-0.0.3] startup                           
++  [0.211s] [ext: omni.client.lib-1.1.0] startup                             
++  [0.227s] [ext: omni.blobkey-1.1.2] startup                                
++  [0.227s] [ext: omni.stats-1.0.1] startup                                  
++  [0.228s] [ext: omni.datastore-0.0.0] startup                              
++  [0.236s] [ext: omni.client-1.3.0] startup                                 
++  [0.241s] [ext: omni.ujitso.default-1.0.0] startup                         
++  [0.243s] [ext: omni.hsscclient-1.1.2] startup                             
++  [0.246s] [ext: omni.gpu_foundation.shadercache.vulkan-1.0.0] startup      
++  [0.251s] [ext: omni.assets.plugins-0.0.0] startup                         
++  [0.252s] [ext: omni.gpu_foundation-0.0.0] startup                         
++  [0.261s] [ext: carb.windowing.plugins-1.0.0] startup                      
++  [0.285s] [ext: omni.kit.renderer.init-0.0.0] startup                      
++                                                                            
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  | Driver Version: 575.57.08     | Graphics API: Vulkan                    
++  |======================================================================== 
++  =====================|                                                    
++  | GPU | Name                             | Active | LDA | GPU Memory |    
++  Vendor-ID | LUID       |                                                  
++  |     |                                  |        |     |            |    
++  Device-ID | UUID       |                                                  
++  |     |                                  |        |     |            |    
++  Bus-ID    |            |                                                  
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  | 0   | NVIDIA GeForce RTX 4090          | Yes: 0 |     | 24564   MB |    
++  10de      | 0          |                                                  
++  |     |                                  |        |     |            |    
++  2684      | 8944a81d.. |                                                  
++  |     |                                  |        |     |            | 11 
++          |            |                                                    
++  |======================================================================== 
++  =====================|                                                    
++  | OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel:     
++  5.15.0-164-generic                                                        
++  | XServer Vendor: The X.Org Foundation, XServer Version: 12014000         
++  (1.20.14.0)                                                               
++  | Processor: Intel(R) Xeon(R) Gold 6430                                   
++  | Bare Metal Cores: 64 | Bare Metal Logical Cores: 128                    
++  | Core Usage Quota: 14                                                    
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  | Total Memory (MB): 51200 | Free Memory: 5966                            
++  | Total Page/Swap (MB): 0 | Free Page/Swap: 0                             
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  [1.564s] [ext: omni.materialx.libs-1.0.7] startup                         
++  [1.574s] [ext: omni.kit.pipapi-0.0.0] startup                             
++  [1.575s] [ext: omni.usd.config-1.0.6] startup                             
++  [1.579s] [ext: omni.gpucompute.plugins-0.0.0] startup                     
++  [1.579s] [ext: omni.usd.libs-1.0.1] startup                               
++  [1.682s] [ext: omni.mdl-56.0.3] startup                                   
++  [1.841s] [ext: omni.iray.libs-0.0.0] startup                              
++  [1.847s] [ext: omni.mdl.neuraylib-0.2.12] startup                         
++  [1.851s] [ext: omni.kit.usd.mdl-1.1.5] startup                            
++  [1.968s] [ext: omni.kit.telemetry-0.5.2] startup                          
++  [1.993s] [ext: omni.kit.pip_archive-0.0.0] startup                        
++  [1.993s] [ext: omni.kit.loop-isaac-1.3.7] startup                         
++  [1.995s] [ext: omni.kit.test-2.0.1] startup                               
++  [2.056s] [ext: omni.appwindow-1.1.10] startup                             
++  [2.060s] [ext: omni.kit.renderer.core-1.1.0] startup                      
++  [2.136s] [ext: omni.kit.renderer.capture-0.0.0] startup                   
++  [2.138s] [ext: omni.kit.renderer.imgui-2.0.5] startup                     
++  [2.225s] [ext: omni.ui-2.27.1] startup                                    
++  [2.237s] [ext: omni.kit.mainwindow-1.0.3] startup                         
++  [2.238s] [ext: carb.audio-0.1.0] startup                                  
++  [2.264s] [ext: omni.uiaudio-1.0.0] startup                                
++  [2.265s] [ext: omni.kit.uiapp-0.0.0] startup                              
++  [2.265s] [ext: omni.usd.schema.metrics.assembler-107.3.1] startup         
++  [2.268s] [ext: omni.usd.schema.anim-0.0.0] startup                        
++  [2.292s] [ext: omni.usd.schema.physx-107.3.26] startup                    
++  [2.331s] [ext: omni.usd.schema.geospatial-0.0.0] startup                  
++  [2.334s] [ext: isaacsim.robot.schema-3.6.0] startup                       
++  [2.343s] [ext: omni.usd.schema.audio-0.0.0] startup                       
++  [2.347s] [ext: omni.usd.schema.semantics-0.0.0] startup                   
++  [2.349s] [ext: omni.usd_resolver-1.0.0] startup                           
++  [2.354s] [ext: usdrt.scenegraph-7.6.1] startup                            
++  [2.397s] [ext: omni.kit.actions.core-1.0.0] startup                       
++  [2.400s] [ext: omni.timeline-1.0.14] startup                              
++  [2.402s] [ext: omni.usd.core-1.5.3] startup                               
++  [2.405s] [ext: omni.resourcemonitor-107.0.1] startup                      
++  [2.407s] [ext: omni.activity.core-1.0.3] startup                          
++  [2.408s] [ext: omni.kit.audiodeviceenum-1.0.2] startup                    
++  [2.410s] [ext: omni.hydra.usdrt_delegate-7.5.1] startup                   
++  [2.417s] [ext: omni.graph.exec-0.9.6] startup                             
++  [2.418s] [ext: omni.kit.window.popup_dialog-2.0.24] startup               
++  [2.422s] [ext: omni.kit.exec.core-0.13.4] startup                         
++  [2.424s] [ext: omni.kit.widget.nucleus_connector-2.0.1] startup           
++  [2.427s] [ext: omni.kit.usd_undo-0.1.8] startup                           
++  [2.427s] [ext: omni.kit.commands-1.4.10] startup                          
++  [2.433s] [ext: omni.hydra.scene_delegate-0.3.4] startup                   
++  [2.438s] [ext: omni.usd-1.13.10] startup                                  
++  [2.491s] [ext: omni.kit.asset_converter-5.0.17] startup                   
++  [2.504s] [ext: omni.usd.schema.omni_lens_distortion-0.0.0] startup        
++  [2.505s] [ext: omni.usd.schema.omni_sensors-0.0.0] startup                
++  [2.506s] [ext: omni.usd.schema.render_settings.rtx-0.0.0] startup         
++  [2.508s] [ext: omni.usd.schema.omnigraph-1.0.0] startup                   
++  [2.515s] [ext: omni.usd.schema.omniscripting-1.0.0] startup               
++  [2.520s] [ext: omni.kit.property.adapter.core-1.0.2] startup              
++  [2.523s] [ext: omni.kit.usd.collect-2.4.5] startup                        
++  [2.526s] [ext: omni.hydra.engine.stats-1.0.3] startup                     
++  [2.529s] [ext: omni.kit.clipboard-1.0.5] startup                          
++  [2.530s] [ext: omni.kit.property.adapter.usd-1.0.2] startup               
++  [2.531s] [ext: omni.kit.menu.core-1.1.2] startup                          
++  [2.532s] [ext: omni.kit.widget.options_menu-1.1.6] startup                
++  [2.535s] [ext: omni.kit.helper.file_utils-0.1.9] startup                  
++  [2.537s] [ext: omni.kit.widget.path_field-2.0.11] startup                 
++  [2.538s] [ext: omni.kit.widget.context_menu-1.2.5] startup                
++  [2.539s] [ext: omni.kit.widget.options_button-1.0.3] startup              
++  [2.540s] [ext: omni.kit.widget.filebrowser-2.12.3] startup                
++  [2.546s] [ext: omni.kit.widget.browser_bar-2.0.10] startup                
++  [2.547s] [ext: omni.kit.property.adapter.fabric-1.0.3] startup            
++  [2.548s] [ext: omni.inspect-1.0.2] startup                                
++  [2.549s] [ext: omni.kit.notification_manager-1.0.10] startup              
++  [2.551s] [ext: omni.graph.core-2.184.5] startup                           
++  [2.555s] [ext: omni.ui.scene-1.11.5] startup                              
++  [2.560s] [ext: isaacsim.core.deprecation_manager-0.2.7] startup           
++  [2.561s] [ext: omni.kit.window.filepicker-2.13.4] startup                 
++  [2.578s] [ext: omni.kit.stage_template.core-1.1.22] startup               
++  [2.578s] [ext: omni.kit.menu.utils-2.0.5] startup                         
++  [2.587s] [ext: omni.kit.hotkeys.core-1.3.10] startup                      
++  [2.587s] [ext: omni.index.libs-380600.8087.0] startup                     
++  [2.588s] [ext: omni.kit.window.file_importer-1.1.18] startup              
++  [2.590s] [ext: omni.kit.window.file_exporter-1.0.33] startup              
++  [2.591s] [ext: omni.kit.widget.searchfield-1.1.8] startup                 
++  [2.592s] [ext: omni.kit.window.file-2.0.5] startup                        
++  [2.595s] [ext: omni.kit.window.drop_support-1.0.5] startup                
++  [2.596s] [ext: omni.kit.window.content_browser_registry-0.0.6] startup    
++  [2.596s] [ext: omni.kit.widget.filter-1.1.4] startup                      
++  [2.597s] [ext: omni.kit.widget.highlight_label-1.0.3] startup             
++  [2.598s] [ext: omni.kit.window.content_browser-3.1.3] startup             
++  [2.611s] [ext: omni.index-1.0.1] startup                                  
++  [2.612s] [ext: omni.hydra.rtx.shadercache.vulkan-1.0.0] startup           
++  [2.613s] [ext: omni.kit.window.property-1.12.1] startup                   
++  [2.616s] [ext: omni.kit.widget.searchable_combobox-1.0.6] startup         
++  [2.617s] [ext: omni.kit.usd.layers-2.2.11] startup                        
++  [2.626s] [ext: omni.kit.widget.settings-1.2.6] startup                    
++  [2.628s] [ext: omni.kit.context_menu-1.8.6] startup                       
++  [2.630s] [ext: omni.kit.window.preferences-1.8.0] startup                 
++  [2.634s] [ext: omni.kit.viewport.registry-104.0.6] startup                
++  [2.634s] [ext: omni.kit.widget.stage-3.1.4] startup                       
++  [2.647s] [ext: omni.kit.viewport.menubar.core-107.2.1] startup            
++  [2.658s] [ext: omni.volume-0.5.2] startup                                 
++  [2.661s] [ext: omni.ujitso.client-0.0.0] startup                          
++  [2.661s] [ext: omni.kit.viewport.menubar.camera-107.0.6] startup          
++  [2.666s] [ext: omni.hydra.rtx-1.0.0] startup                              
++  2026-02-21T15:58:54Z [2,664ms] [Warning] [omni.log] Source: omni.hydra    
++  was already registered.                                                   
++  [2.705s] [ext: omni.kit.property.usd-4.5.12] startup                      
++  [2.717s] [ext: isaacsim.core.version-2.0.6] startup                       
++  [2.718s] [ext: omni.kit.viewport.scene_camera_model-1.0.6] startup        
++  [2.723s] [ext: omni.kit.hydra_texture-1.4.6] startup                      
++  [2.727s] [ext: omni.kit.material.library-2.0.7] startup                   
++  [2.736s] [ext: isaacsim.gui.property-1.1.3] startup                       
++  [2.737s] [ext: isaacsim.app.about-2.0.11] startup                         
++  [2.743s] [ext: omni.kit.raycast.query-1.1.0] startup                      
++  [2.749s] [ext: omni.kit.widget.viewport-107.1.3] startup                  
++  [2.753s] [ext: omni.kit.viewport.legacy_gizmos-1.0.19] startup            
++  [2.756s] [ext: omni.usdphysics-107.3.26] startup                          
++  [2.759s] [ext: omni.kit.widget.prompt-1.0.7] startup                      
++  [2.760s] [ext: omni.kit.widget.text_editor-1.1.1] startup                 
++  [2.761s] [ext: omni.kit.viewport.window-107.2.0] startup                  
++  [2.778s] [ext: omni.kit.usdz_export-1.0.9] startup                        
++  [2.780s] [ext: omni.graph.tools-1.79.2] startup                           
++  [2.805s] [ext: omni.kit.window.extensions-1.4.27] startup                 
++  [2.811s] [ext: omni.kit.viewport.utility-1.1.2] startup                   
++  [2.812s] [ext: omni.kit.tool.asset_importer-4.3.2] startup                
++  [2.817s] [ext: omni.graph.action_core-1.1.7] startup                      
++  [2.819s] [ext: omni.graph-1.141.2] startup                                
++  [2.867s] [ext: isaacsim.asset.importer.mjcf-2.5.13] startup               
++  [2.923s] [ext: omni.graph.action_nodes-1.50.4] startup                    
++  [2.928s] [ext: omni.kvdb-107.3.26] startup                                
++  [2.933s] [ext: omni.graph.action-1.130.0] startup                         
++  [2.933s] [ext: omni.convexdecomposition-107.3.26] startup                 
++  [2.940s] [ext: omni.localcache-107.3.26] startup                          
++  [2.943s] [ext: omni.physx.foundation-107.3.26] startup                    
++  [2.947s] [ext: omni.kit.manipulator.viewport-107.0.1] startup             
++  [2.949s] [ext: omni.kit.widget.stage_icons-1.0.8] startup                 
++  [2.951s] [ext: omni.kit.widget.zoombar-1.0.6] startup                     
++  [2.954s] [ext: omni.ui_query-1.1.8] startup                               
++  [2.955s] [ext: omni.physx.cooking-107.3.26] startup                       
++  [2.968s] [ext: omni.graph.visualization.nodes-2.1.3] startup              
++  [2.987s] [ext: omni.kit.window.stage-2.6.1] startup                       
++  [2.996s] [ext: omni.kit.browser.core-2.3.13] startup                      
++  [3.005s] [ext: omni.kit.ui_test-1.3.7] startup                            
++  [3.008s] [ext: omni.physx-107.3.26] startup                               
++  [3.019s] [ext: omni.kit.tool.collect-2.2.18] startup                      
++  [3.022s] [ext: omni.kit.menu.stage-1.2.7] startup                         
++  [3.024s] [ext: omni.kit.browser.folder.core-1.10.9] startup               
++  [3.030s] [ext: semantics.schema.property-2.0.1] startup                   
++  2026-02-21T15:58:54Z [3,010ms] [Warning] [pxr.Semantics] pxr.Semantics is 
++   deprecated - please use Semantics instead                                
++  [3.035s] [ext: isaacsim.gui.components-1.2.1] startup                     
++  [3.039s] [ext: isaacsim.examples.browser-0.2.1] startup                   
++  [3.045s] [ext: isaacsim.asset.importer.urdf-2.4.31] startup               
++  [3.072s] [ext: isaacsim.core.throttling-2.2.2] startup                    
++  [3.076s] [ext: omni.kit.manipulator.transform-107.0.0] startup            
++  [3.092s] [ext: omni.kit.widget.toolbar-2.0.1] startup                     
++  [3.100s] [ext: omni.kit.manipulator.selector-1.1.3] startup               
++  [3.102s] [ext: omni.kit.primitive.mesh-1.0.17] startup                    
++  [3.106s] [ext: omni.kit.manipulator.tool.snap-1.5.13] startup             
++  [3.112s] [ext: omni.warp.core-1.8.2] startup                              
++  [3.348s] [ext: omni.usd.metrics.assembler-107.3.1] startup                
++  [3.353s] [ext: omni.kit.stage_templates-2.0.0] startup                    
++  [3.356s] [ext: omni.kit.viewport.manipulator.transform-107.0.4] startup   
++  [3.363s] [ext: isaacsim.core.experimental.utils-0.3.0] startup            
++  [3.364s] [ext: omni.fabric.commands-1.1.6] startup                        
++  [3.369s] [ext: omni.kit.manipulator.prim.core-107.0.8] startup            
++  [3.378s] [ext: isaacsim.storage.native-1.5.1] startup                     
++  [3.381s] [ext: omni.physics-107.3.26] startup                             
++  [3.386s] [ext: omni.kit.numpy.common-0.1.3] startup                       
++  [3.388s] [ext: omni.kit.manipulator.prim.fabric-107.0.4] startup          
++  [3.390s] [ext: omni.kit.manipulator.prim.usd-107.0.3] startup             
++  [3.392s] [ext: omni.physics.physx-107.3.26] startup                       
++  2026-02-21T15:58:55Z [3,370ms] [Warning] [carb] Acquiring non optional    
++  plugin interface which is not listed as dependency:                       
++  [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by       
++  client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS()      
++  macro of a client.                                                        
++  [3.395s] [ext: omni.kit.viewport.actions-107.0.2] startup                 
++  [3.400s] [ext: omni.debugdraw-0.1.4] startup                              
++  [3.405s] [ext: omni.kit.manipulator.prim-107.0.0] startup                 
++  [3.405s] [ext: omni.kit.manipulator.selection-106.0.1] startup            
++  [3.407s] [ext: omni.kit.viewport.menubar.display-107.0.3] startup         
++  [3.409s] [ext: omni.kit.widget.graph-2.0.0] startup                       
++  [3.416s] [ext: omni.kit.widget.layers-1.8.6] startup                      
++  [3.430s] [ext: omni.physics.stageupdate-107.3.26] startup                 
++  [3.433s] [ext: omni.physx.commands-107.3.26] startup                      
++  [3.439s] [ext: omni.kit.graph.delegate.default-1.2.3] startup             
++  [3.441s] [ext: omni.usdphysics.ui-107.3.26] startup                       
++  [3.472s] [ext: omni.isaac.dynamic_control-2.0.7] startup                  
++  2026-02-21T15:58:55Z [3,454ms] [Warning] [omni.isaac.dynamic_control]     
++  omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action   
++  is needed from end-users.                                                 
++  [3.479s] [ext: omni.physics.tensors-107.3.26] startup                     
++  [3.486s] [ext: omni.kit.graph.editor.core-1.5.3] startup                  
++  [3.489s] [ext: omni.physx.ui-107.3.26] startup                            
++  [3.519s] [ext: omni.kit.graph.usd.commands-1.3.1] startup                 
++  [3.522s] [ext: omni.graph.image.core-0.6.1] startup                       
++  [3.523s] [ext: omni.kit.widget.material_preview-1.0.16] startup           
++  [3.525s] [ext: omni.usd.metrics.assembler.physics-107.3.26] startup       
++  [3.528s] [ext: omni.graph.scriptnode-1.50.0] startup                      
++  [3.530s] [ext: omni.graph.image.nodes-1.3.1] startup                      
++  [3.532s] [ext: omni.kit.window.material_graph-1.9.1] startup              
++  [3.549s] [ext: isaacsim.core.utils-3.5.1] startup                         
++  [3.553s] [ext: omni.physx.tensors-107.3.26] startup                       
++  [3.563s] [ext: omni.syntheticdata-0.6.13] startup                         
++  [3.595s] [ext: omni.graph.nodes-1.170.10] startup                         
++  [3.609s] [ext: omni.sensors.nv.common-3.0.0] startup                      
++  [3.623s] [ext: isaacsim.core.simulation_manager-1.4.4] startup            
++  [5.425s] [ext: omni.graph.ui_nodes-1.50.5] startup                        
++  [5.432s] [ext: omni.videoencoding-0.1.2] startup                          
++  [5.436s] [ext: omni.sensors.net-1.0.0] startup                            
++  [5.441s] [ext: omni.sensors.nv.materials-2.0.0] startup                   
++  [5.447s] [ext: isaacsim.core.prims-0.6.1] startup                         
++  [5.488s] [ext: omni.warp-1.8.2] startup                                   
++  [5.501s] [ext: isaacsim.test.docstring-1.1.0] startup                     
++  [5.509s] [ext: omni.sensors.nv.wpm-3.0.0] startup                         
++  [5.512s] [ext: omni.sensors.nv.lidar-3.0.0] startup                       
++  [5.521s] [ext: isaacsim.core.api-4.8.0] startup                           
++  [5.598s] [ext: omni.replicator.core-1.12.27] startup                      
++  2026-02-21T15:58:57Z [5,717ms] [Warning] [omni.graph.core.plugin] Found   
++  duplicate of category 'Replicator' - was 'Annotators', adding 'Fabric     
++  Reader'                                                                   
++  2026-02-21T15:58:57Z [5,717ms] [Warning] [omni.graph.core.plugin]         
++  Category 'Replicator' not accepted on node type                           
++  'omni.replicator.core.FabricReader' in extension 'omni.replicator.core'   
++  2026-02-21T15:58:57Z [5,718ms] [Warning]                                  
++  [omni.replicator.core.scripts.extension] No material configuration file,  
++  adding configuration to material settings directly.                       
++  [5.746s] [ext: isaacsim.core.experimental.prims-0.8.1] startup            
++  [5.804s] [ext: omni.sensors.nv.radar-3.0.0] startup                       
++  [5.811s] [ext: omni.sensors.nv.ids-2.0.0] startup                         
++  [5.814s] [ext: isaacsim.util.debug_draw-3.1.0] startup                    
++  [5.823s] [ext: isaacsim.core.nodes-3.4.3] startup                         
++  [5.839s] [ext: isaacsim.robot.surface_gripper-3.3.1] startup              
++  [5.851s] [ext: isaacsim.sensors.rtx-15.8.4] startup                       
++  [5.877s] [ext: isaacsim.robot.manipulators-3.3.6] startup                 
++  [5.910s] [ext: omni.kit.property.audio-1.0.16] startup                    
++  [5.962s] [ext: isaacsim.sensors.physics-0.4.3] startup                    
++  [5.984s] [ext: omni.kit.property.camera-1.0.10] startup                   
++  [5.994s] [ext: omni.kit.property.geometry-2.0.4] startup                  
++  [6.018s] [ext: omni.kit.property.light-1.0.12] startup                    
++  [6.045s] [ext: omni.kit.menu.create-2.0.1] startup                        
++  [6.053s] [ext: isaacsim.robot.policy.examples-4.1.11] startup             
++  [6.063s] [ext: omni.hydra.scene_api-0.1.2] startup                        
++  [6.071s] [ext: omni.kit.stagerecorder.core-107.0.3] startup               
++  [6.080s] [ext: omni.kit.property.material-1.11.9] startup                 
++  [6.108s] [ext: omni.kit.property.render-1.2.1] startup                    
++  [6.112s] [ext: omni.kit.scripting-107.3.2] startup                        
++  [6.127s] [ext: omni.kit.property.transform-1.5.13] startup                
++  [6.186s] [ext: omni.kit.stagerecorder.ui-107.0.1] startup                 
++  [6.303s] [ext: omni.anim.curve.core-1.3.1] startup                        
++  [6.515s] [ext: omni.kit.manipulator.camera-106.0.4] startup               
++  [6.640s] [ext: isaacsim.replicator.behavior-1.1.16] startup               
++  [6.684s] [ext: omni.kit.property.bundle-1.4.1] startup                    
++  [6.703s] [ext: omni.kit.stagerecorder.bundle-105.0.2] startup             
++  [6.705s] [ext: isaacsim.simulation_app-2.12.2] startup                    
++  [6.706s] [ext: omni.kit.viewport.menubar.lighting-107.3.1] startup        
++  [6.713s] [ext: omni.kit.property.physx-107.3.26] startup                  
++  [6.749s] [ext: omni.physx.demos-107.3.26] startup                         
++  [6.783s] [ext: omni.kit.viewport.menubar.render-107.0.10] startup         
++  [6.787s] [ext: omni.kit.viewport.menubar.settings-107.0.3] startup        
++  [6.793s] [ext: isaacsim.robot.wheeled_robots-4.0.24] startup              
++  [6.799s] [ext: isaacsim.core.cloner-1.4.10] startup                       
++  [6.805s] [ext: omni.physx.vehicle-107.3.26] startup                       
++  [6.845s] [ext: omni.asset_validator.core-1.1.6] startup                   
++  [6.903s] [ext: omni.kit.window.toolbar-2.0.0] startup                     
++  [6.907s] [ext: omni.kit.window.console-1.1.4] startup                     
++  [6.912s] [ext: omni.physx.camera-107.3.26] startup                        
++  [6.924s] [ext: omni.physx.asset_validator-107.3.26] startup               
++  [6.930s] [ext: isaacsim.sensors.camera-1.3.6] startup                     
++  [6.937s] [ext: omni.physx.supportui-107.3.26] startup                     
++  [6.953s] [ext: omni.physx.cct-107.3.26] startup                           
++  [6.967s] [ext: omni.ocio-0.1.1] startup                                   
++  [6.970s] [ext: omni.rtx.window.settings-0.6.19] startup                   
++  [6.983s] [ext: omni.physx.telemetry-107.3.26] startup                     
++  [6.987s] [ext: omni.physx.graph-107.3.26] startup                         
++  [7.001s] [ext: omni.kit.window.script_editor-2.0.1] startup               
++  [7.008s] [ext: omni.kit.window.status_bar-0.1.9] startup                  
++  [7.014s] [ext: omni.kit.selection-0.1.6] startup                          
++  [7.017s] [ext: omni.rtx.settings.core-0.6.5] startup                      
++  [7.022s] [ext: omni.physx.bundle-107.3.26] startup                        
++  [7.023s] [ext: omni.usd.metrics.assembler.ui-107.3.1] startup             
++  [7.041s] [ext: semantics.schema.editor-2.0.2] startup                     
++  [7.045s] [ext: isaacsim.asset.browser-1.3.23] startup                     
++  [7.109s] [ext: isaacsim.gui.menu-2.4.4] startup                           
++  [7.118s] [ext: omni.kit.ui.actions-1.0.5] startup                         
++  [7.122s] [ext: omni.replicator.replicator_yaml-2.0.11] startup            
++  [7.143s] [ext: isaacsim.sensors.physx-2.3.2] startup                      
++  [7.150s] [ext: isaaclab-0.47.2] startup                                   
++  [7.374s] [ext: isaaclab_assets-0.2.3] startup                             
++  [7.661s] [ext: isaaclab_tasks-0.11.6] startup                             
++  [9.461s] [ext: omni.kit.menu.common-2.0.1] startup                        
++  [9.463s] [ext: isaaclab_rl-0.4.4] startup                                 
++  [9.465s] [ext: isaaclab_mimic-1.0.15] startup                             
++  [9.466s] [ext: isaaclab.python-2.3.0] startup                             
++  [9.469s] Simulation App Starting                                          
++  2026-02-21T15:59:01Z [9,668ms] [Warning] [carb.audio.device] audio device 
++   is misconfigured or broken {deviceIndex = 0, name = 'default'} (The      
++  device is likely misconfigured, check your $HOME/.asoundrc)               
++  2026-02-21T15:59:01Z [9,668ms] [Warning] [carb.audio.output] failed to    
++  retrieve the capabilities for device 0 {result = eDeviceLost (2)}         
++  2026-02-21T15:59:01Z [9,668ms] [Warning] [carb.audio.context] failed to   
++  set the requested output during context creation.  Using a null streamer  
++  instead {result = eDeviceLost (2)}                                        
++  2026-02-21T15:59:01Z [9,699ms] [Warning] [omni.fabric.plugin] Warning:    
++  attribute viewportHandle not found for bucket id 9                        
++                                                                            
++  [10.012s] app ready                                                       
++  [13.766s] Simulation App Startup Complete                                 
++  [INFO]: Parsing configuration from:                                       
++  isaac_so_arm101.tasks.reach.joint_pos_env_cfg:SoArm100ReachEnvCfg_PLAY    
++  [INFO]: Parsing configuration from:                                       
++  isaac_so_arm101.tasks.reach.agents.rsl_rl_ppo_cfg:ReachPPORunnerCfg       
++  [INFO] Loading experiment from directory:                                 
++  /root/gpufree-data/isaac_so_arm101/logs/rsl_rl/reach                      
++  Setting seed: 42                                                          
++  [15.003s] [ext: omni.physx.fabric-107.3.26] startup                       
++  [2026-02-21 23:59:06,720][ogn_registration][INFO] - Looking for Python    
++  nodes to register in omni.physx.fabric-107.3.26                           
++  [2026-02-21 23:59:06,720][ogn_registration][INFO] -  -> Registered nodes  
++  from module omni.physxfabric at                                           
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/extscache/omni.physx.fabric-107.3.26+107.3.3.lx64.r.cp311.u353      
++  [2026-02-21 23:59:06,720][ogn_registration][INFO] - Registering nodes in  
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/extscache/omni.physx.fabric-107.3.26+107.3.3.lx64.r.cp311.u353      
++  imported as omni.physxfabric with AutoNode config {}                      
++  [2026-02-21 23:59:06,720][ogn_registration][INFO] - Registering Python    
++  Node Types from omni.physxfabric at                                       
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/extscache/omni.physx.fabric-107.3.26+107.3.3.lx64.r.cp311.u353 in   
++  omni.physx.fabric                                                         
++  [2026-02-21 23:59:06,720][ogn_registration][INFO] -                       
++  ========================================================================= 
++  ===============================================                           
++  [2026-02-21 23:59:06,722][ogn_registration][INFO] - No dependency on      
++  omni.graph, therefore no nodes to register in omni.physx.fabric           
++  [2026-02-21 23:59:06,722][ogn_registration][INFO] - ...None found, no     
++  registration to do                                                        
++  [2026-02-21 23:59:06,722][ogn_registration][INFO] - ...Skipping: No       
++  OmniGraph presence in the module omni.physxfabric - No nodes in this      
++  module, do not remember it                                                
++  [2026-02-21 23:59:06,722][ogn_registration][INFO] - Destroying            
++  registration record for omni.physx.fabric                                 
++  [2026-02-21 23:59:06,722][ogn_registration][INFO] - OGN register          
++  omni.physx.fabric-107.3.26 took 2154900.000000                            
++  [INFO]: Base environment:                                                 
++          Environment device    : cuda:0                                    
++          Environment seed      : 42                                        
++          Physics step-size     : 0.016666666666666666                      
++          Rendering step-size   : 0.03333333333333333                       
++          Environment step-size : 0.03333333333333333                       
++  [INFO]: Time taken for scene creation : 2.139815 seconds                  
++  [INFO]: Scene manager:  <class InteractiveScene>                          
++          Number of environments: 50                                        
++          Environment spacing   : 2.5                                       
++          Source prim name      : /World/envs/env_0                         
++          Global prim paths     : []                                        
++          Replicate physics     : True                                      
++  [INFO]: Starting the simulation. This may take a few seconds. Please      
++  wait...                                                                   
++  2026-02-21T15:59:12Z [20,737ms] [Warning] [omni.fabric.plugin]            
++  getAttributeCount called on non-existent path                             
++  /World/envs/env_9/Robot/link_6/visuals/link_6/node_STL_BINARY_            
++  2026-02-21T15:59:12Z [20,737ms] [Warning] [omni.fabric.plugin] getTypes   
++  called on non-existent path                                               
++  /World/envs/env_9/Robot/link_6/visuals/link_6/node_STL_BINARY_            
++  [INFO]: Time taken for simulation start : 4.533459 seconds                
++  Error executing job with overrides: []                                    
++  Traceback (most recent call last):                                        
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab_tasks/isaaclab_tasks/utils/hydra.py", line  
++  101, in hydra_main                                                        
++      func(env_cfg, agent_cfg, *args, **kwargs)                             
++    File "/root/gpufree-data/isaac_so_arm101/src/isaac_so_arm101/scripts/rs 
++  l_rl/play.py", line 120, in main                                          
++      env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if 
++   args_cli.video else None)                                                
++            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
++  ^^^^^^^^^^^^^^^^^^^^^^^^^^                                                
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/gymnasium/envs/registration.py", line 734, in make                   
++      env = env_creator(**env_spec_kwargs)                                  
++            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                  
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_rl_env.py",     
++  line 82, in __init__                                                      
++      super().__init__(cfg=cfg)                                             
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_env.py", line   
++  167, in __init__                                                          
++      self.sim.reset()                                                      
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab/isaaclab/sim/simulation_context.py", line   
++  504, in reset                                                             
++      self.render()                                                         
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab/isaaclab/sim/simulation_context.py", line   
++  567, in render                                                            
++      raise exception_to_raise                                              
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab/isaaclab/assets/asset_base.py", line 317,   
++  in _initialize_callback                                                   
++      self._initialize_impl()                                               
++    File                                                                    
++  "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/is 
++  aaclab/source/isaaclab/isaaclab/assets/articulation/articulation.py",     
++  line 1549, in _initialize_impl                                            
++      self._process_cfg()                                                   
++    File                                                                    
++  "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/is 
++  aaclab/source/isaaclab/isaaclab/assets/articulation/articulation.py",     
++  line 1651, in _process_cfg                                                
++      indices_list, _, values_list =                                        
++  string_utils.resolve_matching_names_values(                               
++                                                                            
++  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab/isaaclab/utils/string.py", line 368, in     
++  resolve_matching_names_values                                             
++      raise ValueError(                                                     
++  ValueError: Not all regular expressions are matched! Please check that    
++  the regular expressions are correct:                                      
++          joint1: []                                                        
++          joint2: []                                                        
++          joint3: []                                                        
++          joint4: []                                                        
++          joint5: []                                                        
++          joint6: []                                                        
++  Available strings: ['joint_1', 'joint_2', 'joint_3', 'joint_4',           
++  'joint_5', 'joint_6']                                                     
++                                                                            
++                                                                            
++  Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack      
++  trace.                                                                    
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator' for removal                                
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T15:59:14Z [22,436ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Core' for removal                           
++  2026-02-21T15:59:14Z [22,440ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'animation' for removal                                 
++  2026-02-21T15:59:14Z [22,441ms] [Warning] [omni.physx.plugin] USD stage   
++  detach not called, holding a loose ptr to a stage!                        
++  2026-02-21T15:59:14Z [22,577ms] [Warning] [omni.fabric.plugin]            
++  gFabricState->gUsdStageToSimStageWithHistoryMap had 1 outstanding         
++  SimStageWithHistory(s) at shutdown                                        
++  2026-02-21T15:59:14Z [22,582ms] [Warning] [carb.audio.context] 1 contexts 
++   were leaked                                                              
++  2026-02-21T15:59:14Z [22,643ms] [Warning] [carb] Recursive                
++  unloadAllPlugins() detected!                                              
++  (isaac-so-arm101) root@gpufree-container ~/g/isaac_so_arm101 (main) [1]#  
++
++● 错误信息非常清晰，一眼就能定位：
++
++  Available strings: ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5',
++  'joint_6']
++
++  URDF Importer 转换时把 joint1 自动改成了 joint_1（加了下划线）。rm_eco65.py 里
++   init_state.joint_pos 的键是精确匹配，不是正则，所以全部没匹配上。一行修复：
++
++● Update(src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py)
++  ⎿  Added 6 lines, removed 6 lines
++      24          pos=(0.0, 0.0, 0.0),  # 机械臂出生位置                 
++      25          # 睿尔曼6轴机械臂的初始关节角度                        
++      26          joint_pos={                                            
++      27 -            "joint1": 0.0,                                     
++      28 -            "joint2": 0.0,                                     
++      29 -            "joint3": 0.0,                                     
++      30 -            "joint4": 0.0,                                     
++      31 -            "joint5": 0.0,                                     
++      32 -            "joint6": 0.0,                                     
++      27 +            "joint_1": 0.0,                                    
++      28 +            "joint_2": 0.0,                                    
++      29 +            "joint_3": 0.0,                                    
++      30 +            "joint_4": 0.0,                                    
++      31 +            "joint_5": 0.0,                                    
++      32 +            "joint_6": 0.0,                                    
++      33          },                                                     
++      34      ),                                                         
++      35      actuators={                                                
++
++● 完成。再跑一次：
++
++  uv run play --task Isaac-SO-ARM100-Reach-Play-v0
++
++  根因解释：
++  Isaac Sim 的 URDF Importer 在生成 USD 时，会把 joint1（数字直连）规范化为
++  joint_1（加下划线分隔）。ImplicitActuatorCfg 里用的是正则
++  joint.*，能同时匹配两种写法所以没问题；但 init_state.joint_pos 里的 key
++  是精确字符串匹配，所以必须和 USD 里的实际关节名完全一致。
++
++✻ Worked for 30s
++
++❯ (isaac-so-arm101) root@gpufree-container ~/g/isaac_so_arm101 (main)# uv   
++  run play --task Isaac-SO-                                                 
++  ARM100-Reach-Play-v0                                                      
++  [INFO][AppLauncher]: Using device: cuda:0                                 
++  [INFO][AppLauncher]: Loading experience file:                             
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  aclab/apps/isaaclab.python.kit                                            
++  Loading user config located at:                                           
++  '/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/is 
++  aacsim/kit/data/Kit/Isaac-Sim/5.1/user.config.json'                       
++  [Info] [carb] Logging to file:                                            
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/kit/logs/Kit/Isaac-Sim/5.1/kit_20260222_000115.log                  
++  [0.058s] [ext: omni.kit.async_engine-0.0.3] startup                       
++  [0.206s] [ext: omni.metrics.core-0.0.3] startup                           
++  [0.206s] [ext: omni.client.lib-1.1.0] startup                             
++  [0.223s] [ext: omni.blobkey-1.1.2] startup                                
++  [0.223s] [ext: omni.stats-1.0.1] startup                                  
++  [0.224s] [ext: omni.datastore-0.0.0] startup                              
++  [0.231s] [ext: omni.client-1.3.0] startup                                 
++  [0.237s] [ext: omni.ujitso.default-1.0.0] startup                         
++  [0.239s] [ext: omni.hsscclient-1.1.2] startup                             
++  [0.242s] [ext: omni.gpu_foundation.shadercache.vulkan-1.0.0] startup      
++  [0.247s] [ext: omni.assets.plugins-0.0.0] startup                         
++  [0.248s] [ext: omni.gpu_foundation-0.0.0] startup                         
++  [0.257s] [ext: carb.windowing.plugins-1.0.0] startup                      
++  [0.282s] [ext: omni.kit.renderer.init-0.0.0] startup                      
++                                                                            
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  | Driver Version: 575.57.08     | Graphics API: Vulkan                    
++  |======================================================================== 
++  =====================|                                                    
++  | GPU | Name                             | Active | LDA | GPU Memory |    
++  Vendor-ID | LUID       |                                                  
++  |     |                                  |        |     |            |    
++  Device-ID | UUID       |                                                  
++  |     |                                  |        |     |            |    
++  Bus-ID    |            |                                                  
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  | 0   | NVIDIA GeForce RTX 4090          | Yes: 0 |     | 24564   MB |    
++  10de      | 0          |                                                  
++  |     |                                  |        |     |            |    
++  2684      | 8944a81d.. |                                                  
++  |     |                                  |        |     |            | 11 
++          |            |                                                    
++  |======================================================================== 
++  =====================|                                                    
++  | OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel:     
++  5.15.0-164-generic                                                        
++  | XServer Vendor: The X.Org Foundation, XServer Version: 12014000         
++  (1.20.14.0)                                                               
++  | Processor: Intel(R) Xeon(R) Gold 6430                                   
++  | Bare Metal Cores: 64 | Bare Metal Logical Cores: 128                    
++  | Core Usage Quota: 14                                                    
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  | Total Memory (MB): 51200 | Free Memory: 5894                            
++  | Total Page/Swap (MB): 0 | Free Page/Swap: 0                             
++  |------------------------------------------------------------------------ 
++  ---------------------|                                                    
++  [1.580s] [ext: omni.materialx.libs-1.0.7] startup                         
++  [1.590s] [ext: omni.kit.pipapi-0.0.0] startup                             
++  [1.591s] [ext: omni.usd.config-1.0.6] startup                             
++  [1.595s] [ext: omni.gpucompute.plugins-0.0.0] startup                     
++  [1.595s] [ext: omni.usd.libs-1.0.1] startup                               
++  [1.699s] [ext: omni.mdl-56.0.3] startup                                   
++  [1.805s] [ext: omni.iray.libs-0.0.0] startup                              
++  [1.811s] [ext: omni.mdl.neuraylib-0.2.12] startup                         
++  [1.815s] [ext: omni.kit.usd.mdl-1.1.5] startup                            
++  [1.986s] [ext: omni.kit.telemetry-0.5.2] startup                          
++  [2.012s] [ext: omni.kit.pip_archive-0.0.0] startup                        
++  [2.013s] [ext: omni.kit.loop-isaac-1.3.7] startup                         
++  [2.014s] [ext: omni.kit.test-2.0.1] startup                               
++  [2.078s] [ext: omni.appwindow-1.1.10] startup                             
++  [2.082s] [ext: omni.kit.renderer.core-1.1.0] startup                      
++  [2.158s] [ext: omni.kit.renderer.capture-0.0.0] startup                   
++  [2.161s] [ext: omni.kit.renderer.imgui-2.0.5] startup                     
++  [2.252s] [ext: omni.ui-2.27.1] startup                                    
++  [2.264s] [ext: omni.kit.mainwindow-1.0.3] startup                         
++  [2.266s] [ext: carb.audio-0.1.0] startup                                  
++  [2.291s] [ext: omni.uiaudio-1.0.0] startup                                
++  [2.292s] [ext: omni.kit.uiapp-0.0.0] startup                              
++  [2.292s] [ext: omni.usd.schema.metrics.assembler-107.3.1] startup         
++  [2.295s] [ext: omni.usd.schema.anim-0.0.0] startup                        
++  [2.319s] [ext: omni.usd.schema.physx-107.3.26] startup                    
++  [2.363s] [ext: omni.usd.schema.geospatial-0.0.0] startup                  
++  [2.367s] [ext: isaacsim.robot.schema-3.6.0] startup                       
++  [2.376s] [ext: omni.usd.schema.audio-0.0.0] startup                       
++  [2.380s] [ext: omni.usd.schema.semantics-0.0.0] startup                   
++  [2.383s] [ext: omni.usd_resolver-1.0.0] startup                           
++  [2.387s] [ext: usdrt.scenegraph-7.6.1] startup                            
++  [2.431s] [ext: omni.kit.actions.core-1.0.0] startup                       
++  [2.433s] [ext: omni.timeline-1.0.14] startup                              
++  [2.436s] [ext: omni.usd.core-1.5.3] startup                               
++  [2.439s] [ext: omni.resourcemonitor-107.0.1] startup                      
++  [2.441s] [ext: omni.activity.core-1.0.3] startup                          
++  [2.442s] [ext: omni.kit.audiodeviceenum-1.0.2] startup                    
++  [2.444s] [ext: omni.hydra.usdrt_delegate-7.5.1] startup                   
++  [2.451s] [ext: omni.graph.exec-0.9.6] startup                             
++  [2.452s] [ext: omni.kit.window.popup_dialog-2.0.24] startup               
++  [2.456s] [ext: omni.kit.exec.core-0.13.4] startup                         
++  [2.458s] [ext: omni.kit.widget.nucleus_connector-2.0.1] startup           
++  [2.460s] [ext: omni.kit.usd_undo-0.1.8] startup                           
++  [2.461s] [ext: omni.kit.commands-1.4.10] startup                          
++  [2.467s] [ext: omni.hydra.scene_delegate-0.3.4] startup                   
++  [2.472s] [ext: omni.usd-1.13.10] startup                                  
++  [2.526s] [ext: omni.kit.asset_converter-5.0.17] startup                   
++  [2.540s] [ext: omni.usd.schema.omni_lens_distortion-0.0.0] startup        
++  [2.541s] [ext: omni.usd.schema.omni_sensors-0.0.0] startup                
++  [2.541s] [ext: omni.usd.schema.render_settings.rtx-0.0.0] startup         
++  [2.542s] [ext: omni.usd.schema.omnigraph-1.0.0] startup                   
++  [2.549s] [ext: omni.usd.schema.omniscripting-1.0.0] startup               
++  [2.554s] [ext: omni.kit.property.adapter.core-1.0.2] startup              
++  [2.556s] [ext: omni.kit.usd.collect-2.4.5] startup                        
++  [2.559s] [ext: omni.hydra.engine.stats-1.0.3] startup                     
++  [2.562s] [ext: omni.kit.clipboard-1.0.5] startup                          
++  [2.563s] [ext: omni.kit.property.adapter.usd-1.0.2] startup               
++  [2.564s] [ext: omni.kit.menu.core-1.1.2] startup                          
++  [2.565s] [ext: omni.kit.widget.options_menu-1.1.6] startup                
++  [2.568s] [ext: omni.kit.helper.file_utils-0.1.9] startup                  
++  [2.570s] [ext: omni.kit.widget.path_field-2.0.11] startup                 
++  [2.571s] [ext: omni.kit.widget.context_menu-1.2.5] startup                
++  [2.572s] [ext: omni.kit.widget.options_button-1.0.3] startup              
++  [2.572s] [ext: omni.kit.widget.filebrowser-2.12.3] startup                
++  [2.578s] [ext: omni.kit.widget.browser_bar-2.0.10] startup                
++  [2.579s] [ext: omni.kit.property.adapter.fabric-1.0.3] startup            
++  [2.580s] [ext: omni.inspect-1.0.2] startup                                
++  [2.582s] [ext: omni.kit.notification_manager-1.0.10] startup              
++  [2.583s] [ext: omni.graph.core-2.184.5] startup                           
++  [2.586s] [ext: omni.ui.scene-1.11.5] startup                              
++  [2.592s] [ext: isaacsim.core.deprecation_manager-0.2.7] startup           
++  [2.592s] [ext: omni.kit.window.filepicker-2.13.4] startup                 
++  [2.609s] [ext: omni.kit.stage_template.core-1.1.22] startup               
++  [2.609s] [ext: omni.kit.menu.utils-2.0.5] startup                         
++  [2.617s] [ext: omni.kit.hotkeys.core-1.3.10] startup                      
++  [2.618s] [ext: omni.index.libs-380600.8087.0] startup                     
++  [2.618s] [ext: omni.kit.window.file_importer-1.1.18] startup              
++  [2.621s] [ext: omni.kit.window.file_exporter-1.0.33] startup              
++  [2.622s] [ext: omni.kit.widget.searchfield-1.1.8] startup                 
++  [2.623s] [ext: omni.kit.window.file-2.0.5] startup                        
++  [2.626s] [ext: omni.kit.window.drop_support-1.0.5] startup                
++  [2.627s] [ext: omni.kit.window.content_browser_registry-0.0.6] startup    
++  [2.627s] [ext: omni.kit.widget.filter-1.1.4] startup                      
++  [2.628s] [ext: omni.kit.widget.highlight_label-1.0.3] startup             
++  [2.628s] [ext: omni.kit.window.content_browser-3.1.3] startup             
++  [2.642s] [ext: omni.index-1.0.1] startup                                  
++  [2.643s] [ext: omni.hydra.rtx.shadercache.vulkan-1.0.0] startup           
++  [2.644s] [ext: omni.kit.window.property-1.12.1] startup                   
++  [2.647s] [ext: omni.kit.widget.searchable_combobox-1.0.6] startup         
++  [2.648s] [ext: omni.kit.usd.layers-2.2.11] startup                        
++  [2.657s] [ext: omni.kit.widget.settings-1.2.6] startup                    
++  [2.659s] [ext: omni.kit.context_menu-1.8.6] startup                       
++  [2.661s] [ext: omni.kit.window.preferences-1.8.0] startup                 
++  [2.665s] [ext: omni.kit.viewport.registry-104.0.6] startup                
++  [2.665s] [ext: omni.kit.widget.stage-3.1.4] startup                       
++  [2.678s] [ext: omni.kit.viewport.menubar.core-107.2.1] startup            
++  [2.689s] [ext: omni.volume-0.5.2] startup                                 
++  [2.692s] [ext: omni.ujitso.client-0.0.0] startup                          
++  [2.692s] [ext: omni.kit.viewport.menubar.camera-107.0.6] startup          
++  [2.698s] [ext: omni.hydra.rtx-1.0.0] startup                              
++  2026-02-21T16:01:17Z [2,695ms] [Warning] [omni.log] Source: omni.hydra    
++  was already registered.                                                   
++  [2.736s] [ext: omni.kit.property.usd-4.5.12] startup                      
++  [2.749s] [ext: isaacsim.core.version-2.0.6] startup                       
++  [2.750s] [ext: omni.kit.viewport.scene_camera_model-1.0.6] startup        
++  [2.755s] [ext: omni.kit.hydra_texture-1.4.6] startup                      
++  [2.759s] [ext: omni.kit.material.library-2.0.7] startup                   
++  [2.768s] [ext: isaacsim.gui.property-1.1.3] startup                       
++  [2.770s] [ext: isaacsim.app.about-2.0.11] startup                         
++  [2.776s] [ext: omni.kit.raycast.query-1.1.0] startup                      
++  [2.782s] [ext: omni.kit.widget.viewport-107.1.3] startup                  
++  [2.787s] [ext: omni.kit.viewport.legacy_gizmos-1.0.19] startup            
++  [2.789s] [ext: omni.usdphysics-107.3.26] startup                          
++  [2.792s] [ext: omni.kit.widget.prompt-1.0.7] startup                      
++  [2.793s] [ext: omni.kit.widget.text_editor-1.1.1] startup                 
++  [2.795s] [ext: omni.kit.viewport.window-107.2.0] startup                  
++  [2.812s] [ext: omni.kit.usdz_export-1.0.9] startup                        
++  [2.815s] [ext: omni.graph.tools-1.79.2] startup                           
++  [2.840s] [ext: omni.kit.window.extensions-1.4.27] startup                 
++  [2.846s] [ext: omni.kit.viewport.utility-1.1.2] startup                   
++  [2.847s] [ext: omni.kit.tool.asset_importer-4.3.2] startup                
++  [2.853s] [ext: omni.graph.action_core-1.1.7] startup                      
++  [2.855s] [ext: omni.graph-1.141.2] startup                                
++  [2.904s] [ext: isaacsim.asset.importer.mjcf-2.5.13] startup               
++  [2.961s] [ext: omni.graph.action_nodes-1.50.4] startup                    
++  [2.966s] [ext: omni.kvdb-107.3.26] startup                                
++  [2.970s] [ext: omni.graph.action-1.130.0] startup                         
++  [2.972s] [ext: omni.convexdecomposition-107.3.26] startup                 
++  [2.978s] [ext: omni.localcache-107.3.26] startup                          
++  [2.981s] [ext: omni.physx.foundation-107.3.26] startup                    
++  [2.984s] [ext: omni.kit.manipulator.viewport-107.0.1] startup             
++  [2.987s] [ext: omni.kit.widget.stage_icons-1.0.8] startup                 
++  [2.989s] [ext: omni.kit.widget.zoombar-1.0.6] startup                     
++  [2.991s] [ext: omni.ui_query-1.1.8] startup                               
++  [2.994s] [ext: omni.physx.cooking-107.3.26] startup                       
++  [3.017s] [ext: omni.graph.visualization.nodes-2.1.3] startup              
++  [3.029s] [ext: omni.kit.window.stage-2.6.1] startup                       
++  [3.040s] [ext: omni.kit.browser.core-2.3.13] startup                      
++  [3.048s] [ext: omni.kit.ui_test-1.3.7] startup                            
++  [3.051s] [ext: omni.physx-107.3.26] startup                               
++  [3.063s] [ext: omni.kit.tool.collect-2.2.18] startup                      
++  [3.066s] [ext: omni.kit.menu.stage-1.2.7] startup                         
++  [3.068s] [ext: omni.kit.browser.folder.core-1.10.9] startup               
++  [3.075s] [ext: semantics.schema.property-2.0.1] startup                   
++  2026-02-21T16:01:18Z [3,055ms] [Warning] [pxr.Semantics] pxr.Semantics is 
++   deprecated - please use Semantics instead                                
++  [3.080s] [ext: isaacsim.gui.components-1.2.1] startup                     
++  [3.084s] [ext: isaacsim.examples.browser-0.2.1] startup                   
++  [3.090s] [ext: isaacsim.asset.importer.urdf-2.4.31] startup               
++  [3.118s] [ext: isaacsim.core.throttling-2.2.2] startup                    
++  [3.122s] [ext: omni.kit.manipulator.transform-107.0.0] startup            
++  [3.146s] [ext: omni.kit.widget.toolbar-2.0.1] startup                     
++  [3.158s] [ext: omni.kit.manipulator.selector-1.1.3] startup               
++  [3.160s] [ext: omni.kit.primitive.mesh-1.0.17] startup                    
++  [3.166s] [ext: omni.kit.manipulator.tool.snap-1.5.13] startup             
++  [3.173s] [ext: omni.warp.core-1.8.2] startup                              
++  [3.438s] [ext: omni.usd.metrics.assembler-107.3.1] startup                
++  [3.445s] [ext: omni.kit.stage_templates-2.0.0] startup                    
++  [3.448s] [ext: omni.kit.viewport.manipulator.transform-107.0.4] startup   
++  [3.451s] [ext: isaacsim.core.experimental.utils-0.3.0] startup            
++  [3.454s] [ext: omni.fabric.commands-1.1.6] startup                        
++  [3.458s] [ext: omni.kit.manipulator.prim.core-107.0.8] startup            
++  [3.468s] [ext: isaacsim.storage.native-1.5.1] startup                     
++  [3.471s] [ext: omni.physics-107.3.26] startup                             
++  [3.476s] [ext: omni.kit.numpy.common-0.1.3] startup                       
++  [3.478s] [ext: omni.kit.manipulator.prim.fabric-107.0.4] startup          
++  [3.481s] [ext: omni.kit.manipulator.prim.usd-107.0.3] startup             
++  [3.484s] [ext: omni.physics.physx-107.3.26] startup                       
++  2026-02-21T16:01:18Z [3,462ms] [Warning] [carb] Acquiring non optional    
++  plugin interface which is not listed as dependency:                       
++  [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by       
++  client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS()      
++  macro of a client.                                                        
++  [3.487s] [ext: omni.kit.viewport.actions-107.0.2] startup                 
++  [3.493s] [ext: omni.debugdraw-0.1.4] startup                              
++  [3.498s] [ext: omni.kit.manipulator.prim-107.0.0] startup                 
++  [3.498s] [ext: omni.kit.manipulator.selection-106.0.1] startup            
++  [3.500s] [ext: omni.kit.viewport.menubar.display-107.0.3] startup         
++  [3.502s] [ext: omni.kit.widget.graph-2.0.0] startup                       
++  [3.510s] [ext: omni.kit.widget.layers-1.8.6] startup                      
++  [3.526s] [ext: omni.physics.stageupdate-107.3.26] startup                 
++  [3.529s] [ext: omni.physx.commands-107.3.26] startup                      
++  [3.539s] [ext: omni.kit.graph.delegate.default-1.2.3] startup             
++  [3.540s] [ext: omni.usdphysics.ui-107.3.26] startup                       
++  [3.579s] [ext: omni.isaac.dynamic_control-2.0.7] startup                  
++  2026-02-21T16:01:18Z [3,562ms] [Warning] [omni.isaac.dynamic_control]     
++  omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action   
++  is needed from end-users.                                                 
++  [3.587s] [ext: omni.physics.tensors-107.3.26] startup                     
++  [3.596s] [ext: omni.kit.graph.editor.core-1.5.3] startup                  
++  [3.600s] [ext: omni.physx.ui-107.3.26] startup                            
++  [3.635s] [ext: omni.kit.graph.usd.commands-1.3.1] startup                 
++  [3.638s] [ext: omni.graph.image.core-0.6.1] startup                       
++  [3.640s] [ext: omni.kit.widget.material_preview-1.0.16] startup           
++  [3.642s] [ext: omni.usd.metrics.assembler.physics-107.3.26] startup       
++  [3.646s] [ext: omni.graph.scriptnode-1.50.0] startup                      
++  [3.648s] [ext: omni.graph.image.nodes-1.3.1] startup                      
++  [3.650s] [ext: omni.kit.window.material_graph-1.9.1] startup              
++  [3.672s] [ext: isaacsim.core.utils-3.5.1] startup                         
++  [3.677s] [ext: omni.physx.tensors-107.3.26] startup                       
++  [3.683s] [ext: omni.syntheticdata-0.6.13] startup                         
++  [3.718s] [ext: omni.graph.nodes-1.170.10] startup                         
++  [3.736s] [ext: omni.sensors.nv.common-3.0.0] startup                      
++  [3.750s] [ext: isaacsim.core.simulation_manager-1.4.4] startup            
++  [5.645s] [ext: omni.graph.ui_nodes-1.50.5] startup                        
++  [5.654s] [ext: omni.videoencoding-0.1.2] startup                          
++  [5.658s] [ext: omni.sensors.net-1.0.0] startup                            
++  [5.665s] [ext: omni.sensors.nv.materials-2.0.0] startup                   
++  [5.675s] [ext: isaacsim.core.prims-0.6.1] startup                         
++  [5.720s] [ext: omni.warp-1.8.2] startup                                   
++  [5.733s] [ext: isaacsim.test.docstring-1.1.0] startup                     
++  [5.741s] [ext: omni.sensors.nv.wpm-3.0.0] startup                         
++  [5.744s] [ext: omni.sensors.nv.lidar-3.0.0] startup                       
++  [5.754s] [ext: isaacsim.core.api-4.8.0] startup                           
++  [5.820s] [ext: omni.replicator.core-1.12.27] startup                      
++  2026-02-21T16:01:21Z [5,952ms] [Warning] [omni.graph.core.plugin] Found   
++  duplicate of category 'Replicator' - was 'Annotators', adding 'Fabric     
++  Reader'                                                                   
++  2026-02-21T16:01:21Z [5,952ms] [Warning] [omni.graph.core.plugin]         
++  Category 'Replicator' not accepted on node type                           
++  'omni.replicator.core.FabricReader' in extension 'omni.replicator.core'   
++  2026-02-21T16:01:21Z [5,953ms] [Warning]                                  
++  [omni.replicator.core.scripts.extension] No material configuration file,  
++  adding configuration to material settings directly.                       
++  [5.982s] [ext: isaacsim.core.experimental.prims-0.8.1] startup            
++  [6.043s] [ext: omni.sensors.nv.radar-3.0.0] startup                       
++  [6.050s] [ext: omni.sensors.nv.ids-2.0.0] startup                         
++  [6.052s] [ext: isaacsim.util.debug_draw-3.1.0] startup                    
++  [6.059s] [ext: isaacsim.core.nodes-3.4.3] startup                         
++  [6.077s] [ext: isaacsim.robot.surface_gripper-3.3.1] startup              
++  [6.090s] [ext: isaacsim.sensors.rtx-15.8.4] startup                       
++  [6.124s] [ext: isaacsim.robot.manipulators-3.3.6] startup                 
++  [6.149s] [ext: omni.kit.property.audio-1.0.16] startup                    
++  [6.175s] [ext: isaacsim.sensors.physics-0.4.3] startup                    
++  [6.210s] [ext: omni.kit.property.camera-1.0.10] startup                   
++  [6.221s] [ext: omni.kit.property.geometry-2.0.4] startup                  
++  [6.243s] [ext: omni.kit.property.light-1.0.12] startup                    
++  [6.312s] [ext: omni.kit.menu.create-2.0.1] startup                        
++  [6.327s] [ext: isaacsim.robot.policy.examples-4.1.11] startup             
++  [6.333s] [ext: omni.hydra.scene_api-0.1.2] startup                        
++  [6.341s] [ext: omni.kit.stagerecorder.core-107.0.3] startup               
++  [6.352s] [ext: omni.kit.property.material-1.11.9] startup                 
++  [6.383s] [ext: omni.kit.property.render-1.2.1] startup                    
++  [6.408s] [ext: omni.kit.scripting-107.3.2] startup                        
++  [6.478s] [ext: omni.kit.property.transform-1.5.13] startup                
++  [6.558s] [ext: omni.kit.stagerecorder.ui-107.0.1] startup                 
++  [6.572s] [ext: omni.anim.curve.core-1.3.1] startup                        
++  [6.702s] [ext: omni.kit.manipulator.camera-106.0.4] startup               
++  [6.804s] [ext: isaacsim.replicator.behavior-1.1.16] startup               
++  [6.839s] [ext: omni.kit.property.bundle-1.4.1] startup                    
++  [6.899s] [ext: omni.kit.stagerecorder.bundle-105.0.2] startup             
++  [6.903s] [ext: isaacsim.simulation_app-2.12.2] startup                    
++  [6.922s] [ext: omni.kit.viewport.menubar.lighting-107.3.1] startup        
++  [6.976s] [ext: omni.kit.property.physx-107.3.26] startup                  
++  [7.020s] [ext: omni.physx.demos-107.3.26] startup                         
++  [7.086s] [ext: omni.kit.viewport.menubar.render-107.0.10] startup         
++  [7.091s] [ext: omni.kit.viewport.menubar.settings-107.0.3] startup        
++  [7.097s] [ext: isaacsim.robot.wheeled_robots-4.0.24] startup              
++  [7.104s] [ext: isaacsim.core.cloner-1.4.10] startup                       
++  [7.110s] [ext: omni.physx.vehicle-107.3.26] startup                       
++  [7.140s] [ext: omni.asset_validator.core-1.1.6] startup                   
++  [7.218s] [ext: omni.kit.window.toolbar-2.0.0] startup                     
++  [7.223s] [ext: omni.kit.window.console-1.1.4] startup                     
++  [7.228s] [ext: omni.physx.camera-107.3.26] startup                        
++  [7.241s] [ext: omni.physx.asset_validator-107.3.26] startup               
++  [7.248s] [ext: isaacsim.sensors.camera-1.3.6] startup                     
++  [7.255s] [ext: omni.physx.supportui-107.3.26] startup                     
++  [7.274s] [ext: omni.physx.cct-107.3.26] startup                           
++  [7.288s] [ext: omni.ocio-0.1.1] startup                                   
++  [7.291s] [ext: omni.rtx.window.settings-0.6.19] startup                   
++  [7.301s] [ext: omni.physx.telemetry-107.3.26] startup                     
++  [7.307s] [ext: omni.physx.graph-107.3.26] startup                         
++  [7.322s] [ext: omni.kit.window.script_editor-2.0.1] startup               
++  [7.329s] [ext: omni.kit.window.status_bar-0.1.9] startup                  
++  [7.335s] [ext: omni.kit.selection-0.1.6] startup                          
++  [7.338s] [ext: omni.rtx.settings.core-0.6.5] startup                      
++  [7.343s] [ext: omni.physx.bundle-107.3.26] startup                        
++  [7.345s] [ext: omni.usd.metrics.assembler.ui-107.3.1] startup             
++  [7.365s] [ext: semantics.schema.editor-2.0.2] startup                     
++  [7.369s] [ext: isaacsim.asset.browser-1.3.23] startup                     
++  [7.443s] [ext: isaacsim.gui.menu-2.4.4] startup                           
++  [7.451s] [ext: omni.kit.ui.actions-1.0.5] startup                         
++  [7.456s] [ext: omni.replicator.replicator_yaml-2.0.11] startup            
++  [7.477s] [ext: isaacsim.sensors.physx-2.3.2] startup                      
++  [7.485s] [ext: isaaclab-0.47.2] startup                                   
++  [7.717s] [ext: isaaclab_assets-0.2.3] startup                             
++  [8.010s] [ext: isaaclab_tasks-0.11.6] startup                             
++  [9.849s] [ext: omni.kit.menu.common-2.0.1] startup                        
++  [9.852s] [ext: isaaclab_rl-0.4.4] startup                                 
++  [9.854s] [ext: isaaclab_mimic-1.0.15] startup                             
++  [9.855s] [ext: isaaclab.python-2.3.0] startup                             
++  [9.860s] Simulation App Starting                                          
++  2026-02-21T16:01:25Z [10,087ms] [Warning] [carb.audio.device] audio       
++  device is misconfigured or broken {deviceIndex = 0, name = 'default'}     
++  (The device is likely misconfigured, check your $HOME/.asoundrc)          
++  2026-02-21T16:01:25Z [10,087ms] [Warning] [carb.audio.output] failed to   
++  retrieve the capabilities for device 0 {result = eDeviceLost (2)}         
++  2026-02-21T16:01:25Z [10,087ms] [Warning] [carb.audio.context] failed to  
++  set the requested output during context creation.  Using a null streamer  
++  instead {result = eDeviceLost (2)}                                        
++  2026-02-21T16:01:25Z [10,123ms] [Warning] [omni.fabric.plugin] Warning:   
++  attribute viewportHandle not found for bucket id 9                        
++                                                                            
++  [10.543s] app ready                                                       
++  [14.506s] Simulation App Startup Complete                                 
++  [INFO]: Parsing configuration from:                                       
++  isaac_so_arm101.tasks.reach.joint_pos_env_cfg:SoArm100ReachEnvCfg_PLAY    
++  [INFO]: Parsing configuration from:                                       
++  isaac_so_arm101.tasks.reach.agents.rsl_rl_ppo_cfg:ReachPPORunnerCfg       
++  [INFO] Loading experiment from directory:                                 
++  /root/gpufree-data/isaac_so_arm101/logs/rsl_rl/reach                      
++  Setting seed: 42                                                          
++  [15.731s] [ext: omni.physx.fabric-107.3.26] startup                       
++  [2026-02-22 00:01:30,989][ogn_registration][INFO] - Looking for Python    
++  nodes to register in omni.physx.fabric-107.3.26                           
++  [2026-02-22 00:01:30,989][ogn_registration][INFO] -  -> Registered nodes  
++  from module omni.physxfabric at                                           
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/extscache/omni.physx.fabric-107.3.26+107.3.3.lx64.r.cp311.u353      
++  [2026-02-22 00:01:30,989][ogn_registration][INFO] - Registering nodes in  
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/extscache/omni.physx.fabric-107.3.26+107.3.3.lx64.r.cp311.u353      
++  imported as omni.physxfabric with AutoNode config {}                      
++  [2026-02-22 00:01:30,990][ogn_registration][INFO] - Registering Python    
++  Node Types from omni.physxfabric at                                       
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/isa 
++  acsim/extscache/omni.physx.fabric-107.3.26+107.3.3.lx64.r.cp311.u353 in   
++  omni.physx.fabric                                                         
++  [2026-02-22 00:01:30,990][ogn_registration][INFO] -                       
++  ========================================================================= 
++  ===============================================                           
++  [2026-02-22 00:01:30,991][ogn_registration][INFO] - No dependency on      
++  omni.graph, therefore no nodes to register in omni.physx.fabric           
++  [2026-02-22 00:01:30,991][ogn_registration][INFO] - ...None found, no     
++  registration to do                                                        
++  [2026-02-22 00:01:30,991][ogn_registration][INFO] - ...Skipping: No       
++  OmniGraph presence in the module omni.physxfabric - No nodes in this      
++  module, do not remember it                                                
++  [2026-02-22 00:01:30,991][ogn_registration][INFO] - Destroying            
++  registration record for omni.physx.fabric                                 
++  [2026-02-22 00:01:30,991][ogn_registration][INFO] - OGN register          
++  omni.physx.fabric-107.3.26 took 1705599.000000                            
++  [INFO]: Base environment:                                                 
++          Environment device    : cuda:0                                    
++          Environment seed      : 42                                        
++          Physics step-size     : 0.016666666666666666                      
++          Rendering step-size   : 0.03333333333333333                       
++          Environment step-size : 0.03333333333333333                       
++  [INFO]: Time taken for scene creation : 1.789214 seconds                  
++  [INFO]: Scene manager:  <class InteractiveScene>                          
++          Number of environments: 50                                        
++          Environment spacing   : 2.5                                       
++          Source prim name      : /World/envs/env_0                         
++          Global prim paths     : []                                        
++          Replicate physics     : True                                      
++  [INFO]: Starting the simulation. This may take a few seconds. Please      
++  wait...                                                                   
++  2026-02-21T16:01:33Z [18,460ms] [Warning] [omni.fabric.plugin]            
++  getAttributeCount called on non-existent path                             
++  /World/envs/env_9/Robot/link_6/visuals/link_6/node_STL_BINARY_            
++  2026-02-21T16:01:33Z [18,460ms] [Warning] [omni.fabric.plugin] getTypes   
++  called on non-existent path                                               
++  /World/envs/env_9/Robot/link_6/visuals/link_6/node_STL_BINARY_            
++  [INFO]: Time taken for simulation start : 2.193787 seconds                
++  [INFO] Command Manager:  <CommandManager> contains 1 active terms.        
++  +--------------------------------------+                                  
++  |         Active Command Terms         |                                  
++  +-------+---------+--------------------+                                  
++  | Index | Name    |        Type        |                                  
++  +-------+---------+--------------------+                                  
++  |   0   | ee_pose | UniformPoseCommand |                                  
++  +-------+---------+--------------------+                                  
++                                                                            
++  [INFO] Event Manager:  <EventManager> contains 1 active terms.            
++  +-------------------------------------+                                   
++  | Active Event Terms in Mode: 'reset' |                                   
++  +---------+---------------------------+                                   
++  |  Index  | Name                      |                                   
++  +---------+---------------------------+                                   
++  |    0    | reset_robot_joints        |                                   
++  +---------+---------------------------+                                   
++                                                                            
++  [INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.      
++  +---------------------+                                                   
++  | Active Recorder Terms |                                                 
++  +-----------+---------+                                                   
++  |   Index   | Name    |                                                   
++  +-----------+---------+                                                   
++  +-----------+---------+                                                   
++                                                                            
++  [INFO] Action Manager:  <ActionManager> contains 1 active terms.          
++  +-----------------------------------+                                     
++  |   Active Action Terms (shape: 6)  |                                     
++  +--------+-------------+------------+                                     
++  | Index  | Name        |  Dimension |                                     
++  +--------+-------------+------------+                                     
++  |   0    | arm_action  |          6 |                                     
++  +--------+-------------+------------+                                     
++                                                                            
++  [INFO] Observation Manager: <ObservationManager> contains 1 groups.       
++  +-------------------------------------------------------+                 
++  | Active Observation Terms in Group: 'policy' (shape: (25,)) |            
++  +-------------+---------------------------+-------------+                 
++  |    Index    | Name                      |    Shape    |                 
++  +-------------+---------------------------+-------------+                 
++  |      0      | joint_pos                 |     (6,)    |                 
++  |      1      | joint_vel                 |     (6,)    |                 
++  |      2      | pose_command              |     (7,)    |                 
++  |      3      | actions                   |     (6,)    |                 
++  +-------------+---------------------------+-------------+                 
++                                                                            
++  [INFO] Termination Manager:  <TerminationManager> contains 1 active       
++  terms.                                                                    
++  +-----------------------------+                                           
++  |   Active Termination Terms  |                                           
++  +-------+----------+----------+                                           
++  | Index | Name     | Time Out |                                           
++  +-------+----------+----------+                                           
++  |   0   | time_out |   True   |                                           
++  +-------+----------+----------+                                           
++                                                                            
++  [INFO] Reward Manager:  <RewardManager> contains 5 active terms.          
++  +---------------------------------------------------------------+         
++  |                      Active Reward Terms                      |         
++  +-------+---------------------------------------------+---------+         
++  | Index | Name                                        |  Weight |         
++  +-------+---------------------------------------------+---------+         
++  |   0   | end_effector_position_tracking              |    -0.2 |         
++  |   1   | end_effector_position_tracking_fine_grained |     0.1 |         
++  |   2   | end_effector_orientation_tracking           |    -0.1 |         
++  |   3   | action_rate                                 | -0.0001 |         
++  |   4   | joint_vel                                   | -0.0001 |         
++  +-------+---------------------------------------------+---------+         
++                                                                            
++  [INFO] Curriculum Manager:  <CurriculumManager> contains 2 active terms.  
++  +--------------------------+                                              
++  | Active Curriculum Terms  |                                              
++  +---------+----------------+                                              
++  |  Index  | Name           |                                              
++  +---------+----------------+                                              
++  |    0    | action_rate    |                                              
++  |    1    | joint_vel      |                                              
++  +---------+----------------+                                              
++                                                                            
++  Creating window for environment.                                          
++  [INFO]: Completed setting up the environment...                           
++  2026-02-21T16:01:35Z [20,424ms] [Warning] [omni.physx.fabric.plugin]      
++  FabricManager::initializePointInstancer mismatched prototypes on point    
++  instancer: /Visuals/Command/body_pose.                                    
++  2026-02-21T16:01:35Z [20,424ms] [Warning] [omni.physx.fabric.plugin]      
++  FabricManager::initializePointInstancer mismatched prototypes on point    
++  instancer: /Visuals/Command/goal_pose.                                    
++  [INFO]: Loading model checkpoint from: /root/gpufree-data/isaac_so_arm101 
++  /logs/rsl_rl/reach/2026-02-21_22-05-24/model_999.pt                       
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/rsl 
++  _rl/utils/utils.py:244: UserWarning: The observation configuration        
++  dictionary 'obs_groups' must contain the 'policy' key. As an observation  
++  group with the name 'policy' was found, this is assumed to be the         
++  observation set. Consider adding the 'policy' key to the 'obs_groups'     
++  dictionary for clarity. This behavior will be removed in a future         
++  version.                                                                  
++    warnings.warn(                                                          
++  /root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-packages/rsl 
++  _rl/utils/utils.py:290: UserWarning: The observation configuration        
++  dictionary 'obs_groups' must contain the 'critic' key. As the             
++  configuration for 'critic' is missing, the observations from the 'policy' 
++   set are used. Consider adding the 'critic' key to the 'obs_groups'       
++  dictionary for clarity. This behavior will be removed in a future         
++  version.                                                                  
++    warnings.warn(                                                          
++  ------------------------------------------------------------------------- 
++  -------                                                                   
++  Resolved observation sets:                                                
++           policy :  ['policy']                                             
++           critic :  ['policy']                                             
++  ------------------------------------------------------------------------- 
++  -------                                                                   
++  Actor MLP: MLP(                                                           
++    (0): Linear(in_features=25, out_features=64, bias=True)                 
++    (1): ELU(alpha=1.0)                                                     
++    (2): Linear(in_features=64, out_features=64, bias=True)                 
++    (3): ELU(alpha=1.0)                                                     
++    (4): Linear(in_features=64, out_features=6, bias=True)                  
++  )                                                                         
++  Critic MLP: MLP(                                                          
++    (0): Linear(in_features=25, out_features=64, bias=True)                 
++    (1): ELU(alpha=1.0)                                                     
++    (2): Linear(in_features=64, out_features=64, bias=True)                 
++    (3): ELU(alpha=1.0)                                                     
++    (4): Linear(in_features=64, out_features=1, bias=True)                  
++  )                                                                         
++  Error executing job with overrides: []                                    
++  Traceback (most recent call last):                                        
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/isaaclab/source/isaaclab_tasks/isaaclab_tasks/utils/hydra.py", line  
++  101, in hydra_main                                                        
++      func(env_cfg, agent_cfg, *args, **kwargs)                             
++    File "/root/gpufree-data/isaac_so_arm101/src/isaac_so_arm101/scripts/rs 
++  l_rl/play.py", line 149, in main                                          
++      runner.load(resume_path)                                              
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/rsl_rl/runners/on_policy_runner.py", line 310, in load               
++      resumed_training =                                                    
++  self.alg.policy.load_state_dict(loaded_dict["model_state_dict"])          
++                                                                            
++  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/rsl_rl/modules/actor_critic.py", line 167, in load_state_dict        
++      super().load_state_dict(state_dict, strict=strict)                    
++    File "/root/gpufree-data/isaac_so_arm101/.venv/lib/python3.11/site-pack 
++  ages/torch/nn/modules/module.py", line 2593, in load_state_dict           
++      raise RuntimeError(                                                   
++  RuntimeError: Error(s) in loading state_dict for ActorCritic:             
++          size mismatch for std: copying a param with shape torch.Size([5]) 
++   from checkpoint, the shape in current model is torch.Size([6]).          
++          size mismatch for actor.0.weight: copying a param with shape      
++  torch.Size([64, 24]) from checkpoint, the shape in current model is       
++  torch.Size([64, 25]).                                                     
++          size mismatch for actor.4.weight: copying a param with shape      
++  torch.Size([5, 64]) from checkpoint, the shape in current model is        
++  torch.Size([6, 64]).                                                      
++          size mismatch for actor.4.bias: copying a param with shape        
++  torch.Size([5]) from checkpoint, the shape in current model is            
++  torch.Size([6]).                                                          
++          size mismatch for critic.0.weight: copying a param with shape     
++  torch.Size([64, 24]) from checkpoint, the shape in current model is       
++  torch.Size([64, 25]).                                                     
++                                                                            
++  Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack      
++  trace.                                                                    
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator' for removal                                
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Annotators' for removal                     
++  2026-02-21T16:01:35Z [20,662ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'Replicator:Core' for removal                           
++  2026-02-21T16:01:35Z [20,666ms] [Warning] [omni.graph.core.plugin] Could  
++  not find category 'animation' for removal                                 
++  2026-02-21T16:01:35Z [20,668ms] [Warning] [omni.physx.plugin] USD stage   
++  detach not called, holding a loose ptr to a stage!                        
++  2026-02-21T16:01:36Z [20,805ms] [Warning] [omni.fabric.plugin]            
++  gFabricState->gUsdStageToSimStageWithHistoryMap had 1 outstanding         
++  SimStageWithHistory(s) at shutdown                                        
++  2026-02-21T16:01:36Z [20,811ms] [Warning] [carb.audio.context] 1 contexts 
++   were leaked                                                              
++  2026-02-21T16:01:36Z [20,872ms] [Warning] [carb] Recursive                
++  unloadAllPlugins() detected!                                              
++  (isaac-so-arm101) root@gpufree-container ~/g/isaac_so_arm101 (main) [1]#  
++   isaac lab 启动了然后看到了机械臂在工作台上了，然后突然闪退了             
++
++● 好消息和坏消息：
++
++  好消息 — 环境配置已经完全正确了！从日志可以看到 ECO65 成功加载：
++
++  Active Action Terms (shape: 6)   ← 6轴关节 ✅
++  joint_pos  (6,)                  ← ECO65 6个关节角 ✅
++  joint_vel  (6,)                  ← ECO65 6个关节速度 ✅
++
++  坏消息 — 闪退的原因是模型不兼容，这是预期行为，不是 bug：
++
++  size mismatch for actor.0.weight:
++      checkpoint shape: [64, 24]   ← 旧模型（SO_ARM100，5轴，obs=24）
++      current model:    [64, 25]   ← 新环境（ECO65，6轴，obs=25）
++
++  size mismatch for actor.4.weight:
++      checkpoint shape: [5, 64]    ← SO_ARM100 输出5个动作
++      current model:    [6, 64]    ← ECO65 输出6个动作
++
++  根因： play 命令自动加载了之前为 SO_ARM100 训练的旧
++  checkpoint（5轴、obs=24），但现在的环境是
++  ECO65（6轴、obs=25），神经网络输入输出维度完全不同，无法直接复用。
++
++  ---
++  下一步：为 ECO65 从头训练
++
++  uv run train --task Isaac-SO-ARM100-Reach-v0 --headless
++
++  这会在 logs/rsl_rl/reach/ 下生成一个新的时间戳目录，专门为 ECO65
++  训练的模型。训练完成（或训练到足够步数）后，play 会自动找到最新的 checkpoint
++  加载。
++
++  对照你的学习计划，这正是第三阶段的起点：
++  "PPO 超参数调优" → 先跑通默认配置，观察 TensorBoard 的 Reward 曲线是否收敛
++
++
++✻ Sautéed for 37s
+\ No newline at end of file
+diff --git a/logs/rsl_rl/reach/2026-02-22_00-02-57/exported/policy.pt b/logs/rsl_rl/reach/2026-02-22_00-02-57/exported/policy.pt
+index 3006142..b8955d9 100644
+Binary files a/logs/rsl_rl/reach/2026-02-22_00-02-57/exported/policy.pt and b/logs/rsl_rl/reach/2026-02-22_00-02-57/exported/policy.pt differ
+diff --git a/src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py b/src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py
+index 7127d72..d845854 100644
+--- a/src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py
++++ b/src/isaac_so_arm101/robots/rm_eco65/rm_eco65.py
+@@ -16,8 +16,9 @@ RM_ECO65_CFG = ArticulationCfg(
+         ),
+         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
+             enabled_self_collisions=False,  # 训练初期建议关闭自碰撞，防止乱动卡死
+-            solver_position_iteration_count=4,
++            solver_position_iteration_count=8,
+             solver_velocity_iteration_count=0,
++            fix_root_link=True,  # 固定基座，等效于 URDF 的 fix_base=True，防止重力下坠
+         ),
+     ),
+     init_state=ArticulationCfg.InitialStateCfg(

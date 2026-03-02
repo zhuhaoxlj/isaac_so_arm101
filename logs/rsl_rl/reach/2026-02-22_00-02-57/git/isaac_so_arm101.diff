@@ -1,0 +1,166 @@
+--- git status ---
+On branch main
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   docs/LearnProgress.md
+	modified:   src/isaac_so_arm101/robots/__init__.py
+	modified:   src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs/rsl_rl/reach/2026-02-22_00-02-57/
+	src/isaac_so_arm101/robots/rm_eco65/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/docs/LearnProgress.md b/docs/LearnProgress.md
+index 1595248..9fd7636 100644
+--- a/docs/LearnProgress.md
++++ b/docs/LearnProgress.md
+@@ -64,3 +64,69 @@ Train/Episode Length（单局步数/耗时）
+ uv run play --task Isaac-SO-ARM100-Reach-Play-v0
+ ```
+ 
++
++## 二、RM_ECO65 机器人建模
++
++### 学习内容
++
++- **URDF 转 USD**：使用 Isaac Sim 的 URDF Importer 工具转换模型
++- **机器人关节与惯量建模**：配置 ArticulationCfg，设置关节参数和惯性
++- **驱动器参数配置**：配置 ImplicitActuator，设置力矩限制、速度限制、PD 参数
++
++### 实践任务
++
++- [x] 将 RM_ECO65 的 URDF 转换为 USD
++- [ ] 创建 ArticulationCfg 配置机器人
++
++------
++
++
++
++## 三、末端强化学习控制
++
++### 学习内容
++
++- **Task 编写**：创建RM_ECO65 RL环境，实现场景重置和终止条件
++- **Observation 构造**：设计状态空间，使用 ObservationManager
++- **Reward 设计**：构建密集奖励函数，平衡多个奖励项
++- **PPO 超参数调优**：调整学习率、batch size、clip range 等参数
++
++### 实践任务：构建末端 Reach 任务
++
++**Observation (16维)**
++
++- 关节角
++- 关节速度
++- 末端到目标向量
++- 目标位置
++
++**Action (6维)**
++
++- 关节增量控制
++
++**Reward**
++
++- 距离奖励
++- 动作惩罚
++- 关节速度惩罚
++- 成功奖励
++- ...
++
++**预期效果**
++
++- 能在nvidia仿真软件内控制RM_ECO65机械臂到点
++
++### 训练目标
++
++- 成功率 > 90%
++- 平均到达时间 < 2秒
++- 泛化到不同目标位置
++
++------
++
++
++
++## 学习资源
++
++- Isaac Lab 官方文档与示例代码
++- https://github.com/MuammerBay/isaac_so_arm101/tree/main 
+\ No newline at end of file
+diff --git a/src/isaac_so_arm101/robots/__init__.py b/src/isaac_so_arm101/robots/__init__.py
+index b378314..564a3c7 100644
+--- a/src/isaac_so_arm101/robots/__init__.py
++++ b/src/isaac_so_arm101/robots/__init__.py
+@@ -10,3 +10,4 @@
+ 
+ from .trs_so100.so_arm100 import *
+ from .trs_so101.so_arm101 import *
++from .rm_eco65.rm_eco65 import RM_ECO65_CFG
+diff --git a/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py b/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+index 06747d9..62d312e 100644
+--- a/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/joint_pos_env_cfg.py
+@@ -18,6 +18,7 @@
+ import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
+ from isaaclab.utils import configclass
+ from isaac_so_arm101.robots import SO_ARM100_CFG, SO_ARM101_CFG  # noqa: F401
++from isaac_so_arm101.robots.rm_eco65.rm_eco65 import RM_ECO65_CFG
+ from isaac_so_arm101.tasks.reach.reach_env_cfg import ReachEnvCfg
+ 
+ ##
+@@ -32,24 +33,23 @@ class SoArm100ReachEnvCfg(ReachEnvCfg):
+         super().__post_init__()
+ 
+         # switch robot to franka
+-        self.scene.robot = SO_ARM100_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+-        # override rewards
+-        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["gripper"]
+-        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["gripper"]
+-        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["gripper"]
+-
+-        # TODO: reorient command target
+-
+-        # override actions
++        # self.scene.robot = SO_ARM100_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
++        self.scene.robot = RM_ECO65_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
++        # override rewards - ECO65 末端执行器为 link_6
++        self.rewards.end_effector_position_tracking.params["asset_cfg"].body_names = ["link_6"]
++        self.rewards.end_effector_position_tracking_fine_grained.params["asset_cfg"].body_names = ["link_6"]
++        self.rewards.end_effector_orientation_tracking.params["asset_cfg"].body_names = ["link_6"]
++
++        # override actions - ECO65 6轴关节名为 joint1~joint6
+         self.actions.arm_action = mdp.JointPositionActionCfg(
+             asset_name="robot",
+-            joint_names=["shoulder_pan", "shoulder_lift", "elbow_flex", "wrist_flex", "wrist_roll"],
++            joint_names=["joint.*"],
+             scale=0.5,
+             use_default_offset=True,
+         )
+         # override command generator body
+         # end-effector is along z-direction
+-        self.commands.ee_pose.body_name = ["gripper"]
++        self.commands.ee_pose.body_name = ["link_6"]
+         # self.commands.ee_pose.ranges.pitch = (math.pi, math.pi)
+ 
+ 
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index b4fc2de..0ea3b42 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -12,6 +12,8 @@ from dataclasses import MISSING
+ 
+ import isaaclab.sim as sim_utils
+ 
++from isaac_so_arm101.robots.trs_so100.so_arm100 import SO_ARM100_CFG
++
+ # import mdp
+ import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
+ from isaaclab.assets import ArticulationCfg, AssetBaseCfg

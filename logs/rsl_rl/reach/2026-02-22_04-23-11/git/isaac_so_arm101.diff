@@ -1,0 +1,83 @@
+--- git status ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+	modified:   src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs/rsl_rl/reach/2026-02-22_04-02-57/
+	logs/rsl_rl/reach/2026-02-22_04-23-11/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+index 8481a5c..06f2467 100644
+--- a/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/agents/rsl_rl_ppo_cfg.py
+@@ -26,10 +26,12 @@ class ReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+-        init_noise_std=1.0,             # 0.2 → 1.0（恢复原始值）：
+-                                        # 0.2 导致 entropy collapse（iter100 noise=0.144→iter1474 noise=0.065）
+-                                        # noise 的自然衰减（1.0→0.1 over 700 iters）本身是探索→开发课程
+-                                        # 振荡问题由 action_rate=-0.005（50×）+ success_bonus std=0.05 解决
++        init_noise_std=0.4,             # 1.0 → 0.4：阻断"噪声剥削"行为
++                                        # run5/run6 教训：init=1.0 → 策略发现大噪声随机碰中目标更高效
++                                        # → 锁定高噪声策略 → 确定性推理时卡在 5cm（run5）或训练发散（run6）
++                                        # init=0.4 ≈ σ_eq（action_rate=-0.005 时 σ_eq≈0.50）：
++                                        # 策略从未经历 σ>0.6 的高噪声阶段，无法发展噪声剥削
++                                        # 被迫学习主动精细接近而非依赖随机碰靶
+         actor_hidden_dims=[256, 128],   # [64,64] → [256,128]：扩大网络容量
+         critic_hidden_dims=[256, 128],
+         activation="elu",
+diff --git a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+index d5e5d31..4872287 100644
+--- a/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
++++ b/src/isaac_so_arm101/tasks/reach/reach_env_cfg.py
+@@ -157,7 +157,9 @@ class RewardsCfg:
+     )
+ 
+     # action penalty
+-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)  # -0.0001 → -0.005：强力抑制目标附近极限环振荡
++    # action_rate=-0.005 配合 entropy_coef=0.01：σ_eq ≈ 3.5×0.01/√0.005 ≈ 0.50（探索期甜点）
++    # curriculum 在 ~500 RL iter 后升至 -0.01 → σ_eq≈0.35（稳定期）
++    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.005)
+     joint_vel = RewTerm(
+         func=mdp.joint_vel_l2,
+         weight=-0.0001,
+@@ -188,14 +190,23 @@ class TerminationsCfg:
+ class CurriculumCfg:
+     """Curriculum terms for the MDP."""
+ 
++    # num_steps 单位是 env steps（非 RL iters）
++    # 1 RL iter = 4096 envs × 32 steps = 131,072 env steps
++    # 65_000_000 env steps ≈ 500 RL iters（在 max_iterations=3000 的 1/6 处触发）
++    #
++    # 两阶段训练策略：
++    #   阶段1 (iter 0-500):   action_rate=-0.005 → σ_eq≈0.50，充足探索，策略学习主动精细接近
++    #   阶段2 (iter 500-3000): action_rate=-0.01  → σ_eq≈0.35，抑制振荡，策略精细化
+     action_rate = CurrTerm(
+-        func=mdp.modify_reward_weight, params={"term_name": "action_rate", "weight": -0.01, "num_steps": 2000}
+-        # -0.005 → -0.01：初始已强化，curriculum 继续加压；num_steps 2000 < max_iterations 确保生效
++        func=mdp.modify_reward_weight,
++        params={"term_name": "action_rate", "weight": -0.01, "num_steps": 65_000_000},
+     )
+ 
++    # joint_vel 同理：阶段1 保持 -0.0001，阶段2 升至 -0.001（10×），配合 action_rate 共同抑制振荡
++    # 注意：final weight=-0.001（而非原来的 -0.005，-0.005 = 50× 初始值，过于激进）
+     joint_vel = CurrTerm(
+-        func=mdp.modify_reward_weight, params={"term_name": "joint_vel", "weight": -0.005, "num_steps": 2000}
+-        # -0.0001 → -0.005：随训练进行逐步惩罚关节速度，稳定收敛后的停留姿态
++        func=mdp.modify_reward_weight,
++        params={"term_name": "joint_vel", "weight": -0.001, "num_steps": 65_000_000},
+     )
+ 
+ 
