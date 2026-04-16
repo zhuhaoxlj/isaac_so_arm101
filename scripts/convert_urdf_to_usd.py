@@ -25,8 +25,8 @@ simulation_app = app_launcher.app
 from isaaclab.sim.converters import UrdfConverter, UrdfConverterCfg
 
 ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets" / "rm_eco65"
-URDF_PATH = ASSETS_DIR / "urdf" / "ECO65-B.urdf"
-OUTPUT_DIR = ASSETS_DIR / "urdf" / "ECO65-B"
+URDF_PATH = ASSETS_DIR / "urdf" / "ECO65-B_brainco_right_hand.urdf"
+OUTPUT_DIR = ASSETS_DIR / "urdf" / "ECO65-B_brainco_right_hand"
 
 print(f"[CONVERT] URDF 路径: {URDF_PATH}")
 print(f"[CONVERT] USD 输出目录: {OUTPUT_DIR}")
@@ -36,7 +36,7 @@ assert URDF_PATH.exists(), f"URDF 文件不存在: {URDF_PATH}"
 cfg = UrdfConverterCfg(
     asset_path=str(URDF_PATH),
     usd_dir=str(OUTPUT_DIR),
-    usd_file_name="ECO65-B.usd",
+    usd_file_name="ECO65-B_brainco_right_hand.usd",
     fix_base=True,
     merge_fixed_joints=True,
     self_collision=False,

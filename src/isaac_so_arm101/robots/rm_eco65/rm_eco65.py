@@ -28,7 +28,7 @@ RM_ECO65_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(  # UsdFileCfg = 从 USD 文件加载（比 URDF 更快）
         # usd_path: USD 文件的完整路径
         # USD = Universal Scene Description（NVIDIA 的 3D 场景格式）
-        usd_path=f"{TEMPLATE_ASSETS_DATA_DIR}/urdf/ECO65-B/ECO65-B.usd",
+        usd_path=f"{TEMPLATE_ASSETS_DATA_DIR}/urdf/ECO65-B_brainco_right_hand/ECO65-B_brainco_right_hand.usd",
         # ------------------------------------------------------------------------
         # rigid_props: 刚体物理属性（定义每个零件的物理行为）
         # ------------------------------------------------------------------------
